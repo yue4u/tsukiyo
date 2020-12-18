@@ -48,6 +48,7 @@ view nonstyle.net in browser
 
 | port  | server       |
 | ----- | ------------ |
+| :80   | nginx proxy  |
 | :4000 | rust api     |
 | :3000 | vue frontend |
 | :5432 | postgresql   |
