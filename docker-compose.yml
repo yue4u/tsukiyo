@@ -1,0 +1,71 @@
+version: "3.9"
+services:
+  nginx:
+    container_name: nonstyle_nginx
+    image: nginx:1.17.10-alpine
+    ports:
+      - 80:80
+    depends_on:
+      - frontend
+      - backend
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+
+  frontend:
+    container_name: nonstyle_frontend
+    build:
+      context: ./frontend
+      target: "develop"
+    ports:
+      - "3000:3000"
+    volumes:
+      - "./frontend:/app"
+    command: /bin/sh -c "yarn dev"
+
+  backend:
+    container_name: nonstyle_backend
+    build:
+      context: ./backend
+      target: "develop"
+    ports:
+      - "4000:4000"
+    depends_on:
+      - db
+    volumes:
+      - ./backend:/app
+      - cargo-cache:/usr/local/cargo/registry
+      - target-cache:/app/target
+    environment:
+      DATABASE_URL: "postgresql://nonstyle:qtJqYM7bFfjtrew@db/development"
+    command: /bin/sh -c "cargo watch -x run"
+
+  db:
+    container_name: nonstyle_db
+    image: postgres:12
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./docker/db/initdb:/docker-entrypoint-initdb.d
+      - ./docker/db/data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: nonstyle
+      POSTGRES_PASSWORD: qtJqYM7bFfjtrew
+      POSTGRES_INITDB_ARGS: --encoding=UTF-8
+      POSTGRES_DB: development
+
+  redis:
+    container_name: nonstyle_redis
+    restart: always
+    image: redis:latest
+    ports:
+      - "6379:6379"
+    expose:
+      - "6379"
+    command: redis-server --appendonly yes
+    volumes:
+      - ./docker/redis:/data'
+
+volumes:
+  db_data:
+  cargo-cache:
+  target-cache:
