@@ -12,7 +12,7 @@
 - actix https://actix.rs/
 - graphql https://graphql.org/
 - DAL http://diesel.rs/
-- reverse proxy https://caddyserver.com/
+- reverse proxy https://www.nginx.com/
 - cache / limit redis https://redis.io/
 
 ## データベース
