@@ -1,7 +1,7 @@
 version: "3.9"
 services:
   nginx:
-    container_name: nonstyle_nginx
+    container_name: tsukiyo_nginx
     image: nginx:1.17.10-alpine
     ports:
       - 80:80
@@ -12,7 +12,7 @@ services:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
 
   frontend:
-    container_name: nonstyle_frontend
+    container_name: tsukiyo_frontend
     build:
       context: ./frontend
       target: "develop"
@@ -23,7 +23,7 @@ services:
     command: /bin/sh -c "yarn dev"
 
   backend:
-    container_name: nonstyle_backend
+    container_name: tsukiyo_backend
     build:
       context: ./backend
       target: "develop"
@@ -36,11 +36,11 @@ services:
       - cargo-cache:/usr/local/cargo/registry
       - target-cache:/app/target
     environment:
-      DATABASE_URL: "postgresql://nonstyle:qtJqYM7bFfjtrew@db/development"
+      DATABASE_URL: "postgresql://tsukiyo:qtJqYM7bFfjtrew@db/development"
     command: /bin/sh -c "cargo watch -x run"
 
   db:
-    container_name: nonstyle_db
+    container_name: tsukiyo_db
     image: postgres:12
     ports:
       - "5432:5432"
@@ -48,13 +48,13 @@ services:
       - ./docker/db/initdb:/docker-entrypoint-initdb.d
       - ./docker/db/data:/var/lib/postgresql/data
     environment:
-      POSTGRES_USER: nonstyle
+      POSTGRES_USER: tsukiyo
       POSTGRES_PASSWORD: qtJqYM7bFfjtrew
       POSTGRES_INITDB_ARGS: --encoding=UTF-8
       POSTGRES_DB: development
 
   redis:
-    container_name: nonstyle_redis
+    container_name: tsukiyo_redis
     restart: always
     image: redis:latest
     ports:

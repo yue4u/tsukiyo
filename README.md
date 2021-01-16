@@ -2,7 +2,7 @@
 
 ## フロントエンド
 
-- vue3 https://v3.ja.vuejs.org/
+- vue3 + vite https://v3.ja.vuejs.org/
 - scss https://sass-lang.com/
 - typescript https://www.typescriptlang.org/
 
