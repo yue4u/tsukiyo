@@ -31,11 +31,13 @@ async fn manual_hello() -> impl Responder {
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
-    HttpServer::new(|| {
+    let pool = db::create_pool();
+    HttpServer::new(move || {
         App::new()
+            .data(pool.clone())
             .service(hello)
             .service(echo)
-            .service(events::controller::list)
+            .service(events::controller::scope())
             .service(view)
             .route("/hey", web::get().to(manual_hello))
     })

@@ -54,9 +54,4 @@ table! {
 
 joinable!(events -> admins (creator_id));
 
-allow_tables_to_appear_in_same_query!(
-    admins,
-    contacts,
-    events,
-    posts,
-);
+allow_tables_to_appear_in_same_query!(admins, contacts, events, posts,);

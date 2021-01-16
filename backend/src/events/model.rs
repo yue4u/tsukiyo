@@ -25,7 +25,7 @@ pub struct Event {
     pub memo: Option<String>,
 }
 
-#[derive(Debug, Default, Insertable)]
+#[derive(Debug, Default, Insertable, Serialize, Deserialize)]
 #[table_name = "events"]
 pub struct NewEvent {
     pub slug: Option<String>,
@@ -43,3 +43,7 @@ pub struct NewEvent {
     pub updated_at: Option<SystemTime>,
     pub memo: Option<String>,
 }
+
+// pub fn seed() {
+//     super::service::create("demo event", "demo event");
+// }
