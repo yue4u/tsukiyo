@@ -1,20 +1,30 @@
-use actix_web::{web, HttpResponse, Responder, Scope};
 use super::model::*;
 use crate::db::DBPool;
+use actix_web::{web, Responder, Scope};
 
 pub fn scope() -> Scope {
     web::scope("/events")
         .route("/list", web::get().to(list))
         .route("/create", web::post().to(create))
+        .route("/create", web::post().to(delete))
 }
 
-async fn create(pool:web::Data<DBPool>,event: web::Json<NewEvent>) -> impl Responder {
-    println!("post_todo");
-    println!("{:?}", event);
-    HttpResponse::Ok().body("ok".to_string())
-    // HttpResponse::Ok().body(super::service::create(pool.get().expect("couldn't get db connection from pool"),"event", "this is a test event"))
+async fn create(pool: web::Data<DBPool>, event: web::Json<NewEvent>) -> impl Responder {
+    // TODO: use web::block
+    // https://github.com/actix/examples/blob/91865b3a2ad175166f472f8b3393eae1a1eb5996/diesel/src/main.rs#L55
+    super::service::create(
+        pool.get().expect("couldn't get db connection from pool"),
+        event.into_inner(),
+    )
 }
 
-async fn list(pool:web::Data<DBPool>) -> impl Responder {
-    HttpResponse::Ok().body(super::service::list(pool.get().expect("couldn't get db connection from pool")))
+async fn delete(pool: web::Data<DBPool>, event_id: web::Json<i32>) -> impl Responder {
+    super::service::delete(
+        pool.get().expect("couldn't get db connection from pool"),
+        event_id.into_inner(),
+    )
+}
+
+async fn list(pool: web::Data<DBPool>) -> impl Responder {
+    super::service::list(pool.get().expect("couldn't get db connection from pool"))
 }

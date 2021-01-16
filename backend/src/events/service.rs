@@ -1,26 +1,24 @@
 use super::model::*;
 use crate::db::DBConn;
-use crate::schema::events;
+use crate::schema::events::{self, dsl::*};
 use diesel::prelude::*;
-use std::default::Default;
 
-pub fn create(conn: DBConn, title: &str, body: &str) -> String {
-    let new_post = NewEvent {
-        title: title.to_string(),
-        body: body.to_string(),
-        ..Default::default()
-    };
-
+pub fn create(conn: DBConn, event: NewEvent) -> String {
     diesel::insert_into(events::table)
-        .values(&new_post)
+        .values(&event)
         .get_result::<Event>(&conn)
         .expect("Error saving new post");
     "ok".to_string()
 }
 
-pub fn list(conn: DBConn) -> String {
-    use crate::schema::events::dsl::*;
+pub fn delete(conn: DBConn, event_id: i32) -> String {
+    diesel::delete(events.filter(id.eq(event_id)))
+        .execute(&conn)
+        .expect("Error delete new post");
+    "ok".to_string()
+}
 
+pub fn list(conn: DBConn) -> String {
     let results = events
         .filter(published.eq(true))
         .limit(5)
