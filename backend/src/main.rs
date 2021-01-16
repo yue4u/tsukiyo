@@ -1,6 +1,7 @@
-pub mod dal;
-pub mod schema;
-pub mod redis;
+mod db;
+mod events;
+mod redis;
+mod schema;
 
 #[macro_use]
 extern crate diesel;
@@ -18,17 +19,10 @@ async fn echo(req_body: String) -> impl Responder {
     HttpResponse::Ok().body(req_body)
 }
 
-
 #[get("/view")]
 async fn view() -> impl Responder {
     redis::incr_page_views().unwrap();
     HttpResponse::Ok().body(redis::get_page_views().unwrap().to_string())
-}
-
-
-#[get("/post/list")]
-async fn list() -> impl Responder {
-    HttpResponse::Ok().body(dal::list_posts())
 }
 
 async fn manual_hello() -> impl Responder {
@@ -41,7 +35,7 @@ async fn main() -> std::io::Result<()> {
         App::new()
             .service(hello)
             .service(echo)
-            .service(list)
+            .service(events::controller::list)
             .service(view)
             .route("/hey", web::get().to(manual_hello))
     })
