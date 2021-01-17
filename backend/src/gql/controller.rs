@@ -3,7 +3,7 @@ use juniper::http::graphiql::graphiql_source;
 use juniper::http::GraphQLRequest;
 
 use super::schema::{create_schema, Schema};
-use crate::db::Pool;
+use crate::sql::db::Pool;
 use crate::Context;
 
 pub(crate) async fn graphql(

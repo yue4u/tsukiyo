@@ -1,4 +1,4 @@
-use crate::schema::events;
+use crate::sql::schema::events;
 use chrono::prelude::NaiveDateTime;
 use juniper::{GraphQLInputObject, GraphQLObject};
 use serde::{Deserialize, Serialize};
@@ -23,29 +23,6 @@ pub struct Event {
     pub updated_at: Option<NaiveDateTime>,
     pub published: bool,
     pub memo: Option<String>,
-}
-impl Event {
-    fn dummy() -> Self {
-        Self {
-            id: 0,
-            slug: Some("dummy slug".to_owned()),
-            title: "title String".to_owned(),
-            body: "body String".to_owned(),
-            genre: Some("dummy genre".to_owned()),
-            tag: Some("dummy tag".to_owned()),
-            fee: Some(999),
-            ogp_img: Some("dummy ogp_img".to_owned()),
-            start_time: Some(chrono::Local::now().naive_utc()),
-            end_time: Some(chrono::Local::now().naive_utc()),
-            publish_time: Some(chrono::Local::now().naive_utc()),
-            page_view: Some(999),
-            creator_id: Some(0),
-            created_at: chrono::Local::now().naive_utc(),
-            updated_at: Some(chrono::Local::now().naive_utc()),
-            published: true,
-            memo: Some("dummy memo".to_owned()),
-        }
-    }
 }
 
 #[derive(Debug, Default, Insertable, Serialize, Deserialize, GraphQLInputObject)]

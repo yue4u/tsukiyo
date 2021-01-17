@@ -1,23 +1,20 @@
-mod db;
 mod events;
 mod gql;
-mod redis;
-mod schema;
+mod sql;
 #[macro_use]
 extern crate diesel;
-extern crate dotenv;
 use actix_cors::Cors;
 use actix_web::{http::header, middleware::Logger, App, HttpServer};
 
 pub(crate) struct Context {
-    pool: db::Pool,
+    pool: sql::db::Pool,
 }
 
 impl juniper::Context for Context {}
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
-    let pool = db::create_pool();
+    let pool = sql::db::create_pool();
     HttpServer::new(move || {
         App::new()
             .wrap(

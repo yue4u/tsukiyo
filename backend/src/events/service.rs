@@ -1,6 +1,6 @@
 use super::model::*;
-use crate::db::Conn;
-use crate::schema::events::{self, dsl::*};
+use crate::sql::db::Conn;
+use crate::sql::schema::events::{self, dsl::*};
 use diesel::prelude::*;
 
 pub fn get(conn: Conn, event_id: i32) -> Result<Event, String> {

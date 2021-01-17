@@ -1,5 +1,5 @@
 use super::model::*;
-use crate::db::Pool;
+use crate::sql::db::Pool;
 use actix_web::{web, Responder, Scope};
 
 pub fn scope() -> Scope {
