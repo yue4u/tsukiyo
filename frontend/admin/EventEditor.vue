@@ -1,8 +1,6 @@
 <template>
   <h1>create new event</h1>
   <form class="form" @submit.prevent="submit">
-    <div class="view" v-html="markdown" />
-    <textarea v-model="body" />
     <label for="title">title</label>
     <input autocomplete="off" id="title" v-model="title" />
     <label for="slug">slug</label>
@@ -28,6 +26,8 @@
     />
     <label for="memo">memo</label>
     <input autocomplete="off" id="memo" v-model="memo" />
+    <div class="view" v-html="markdown" />
+    <textarea v-model="body" />
     <button class="create full" type="submit">create</button>
   </form>
   <div class="info" v-if="state.data">{{ state.data }}</div>
@@ -36,6 +36,7 @@
 
 <script setup lang="ts">
 import { ref, reactive, computed } from "vue";
+// @ts-ignore
 import marked from "@/node_modules/marked/lib/marked.esm.js";
 import { useMutation, CombinedError } from "@urql/vue";
 
@@ -115,6 +116,8 @@ const { executeMutation: createEvent } = useMutation(`
 
 <style lang="scss" scoped>
 .form {
+  margin: 0 auto;
+  max-width: 1000px;
   display: grid;
   gap: 1rem;
   grid-template-columns: 1fr 1fr;
@@ -154,5 +157,10 @@ input {
 }
 .view {
   word-break: break-all;
+}
+textarea {
+  border: 0;
+  background: #eee;
+  padding: 5px;
 }
 </style>

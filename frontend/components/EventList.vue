@@ -1,4 +1,6 @@
 <template>
+  <div v-if="!data?.events?.length">There is no events</div>
+  <div v-else>There is {{ data.events.length }} events</div>
   <div v-if="fetching">Loading...</div>
   <div v-else-if="error">Oh no... {{ error }}</div>
   <div v-else>
@@ -9,6 +11,7 @@
         :key="event.id"
         @click="deleteEvent({ id: event.id })"
       >
+        {{ event.id }} )
         {{ event.title }}
       </li>
     </ul>
@@ -17,7 +20,15 @@
 
 <script setup lang="ts">
 import { useQuery, useMutation } from "@urql/vue";
-const { fetching, data, error } = useQuery({
+import { onMounted } from "vue";
+
+onMounted(() => {
+  executeQuery({
+    requestPolicy: "network-only",
+  });
+});
+
+const { fetching, data, error, executeQuery } = useQuery({
   query: `
         {
           events {
