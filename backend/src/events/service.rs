@@ -26,6 +26,7 @@ pub fn delete(conn: Conn, event_id: i32) -> QueryResult<Event> {
 pub fn list(conn: Conn, by: Option<EventQuery>) -> QueryResult<Vec<Event>> {
     let mut query = events::table.into_boxed();
     if let Some(by_event) = by {
+        // TODO: simplify this
         if let Some(_published) = by_event.published {
             query = query.filter(events::published.eq(_published));
         }

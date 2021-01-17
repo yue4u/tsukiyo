@@ -16,16 +16,14 @@ impl Query {
         "0.1"
     }
     fn event(context: &Context, id: i32) -> FieldResult<Event> {
-        // Get a db connection.
         let conn = context.pool.get()?;
-        let event = crate::events::service::get(conn, id)?;
-        // Return the result.
+        let event = events::service::get(conn, id)?;
         Ok(event)
     }
 
     fn events(context: &Context, by: Option<EventQuery>) -> FieldResult<Vec<Event>> {
         let conn = context.pool.get()?;
-        let events = crate::events::service::list(conn, by)?;
+        let events = events::service::list(conn, by)?;
         Ok(events)
     }
 }
