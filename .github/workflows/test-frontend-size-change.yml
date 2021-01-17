@@ -1,6 +1,6 @@
 name: Test frontend
 
-on: [push]
+on: [pull_request]
 
 jobs:
   run-tests:
@@ -35,7 +35,11 @@ jobs:
       - name: Test Lint
         run: yarn lint
 
-      - name: Test Jest
-        run: yarn test:unit
-
-      # TODO: fix and e2e/type tests
+      - name: Test Build
+        uses: preactjs/compressed-size-action@v2
+        with:
+          repo-token: "${{ secrets.GITHUB_TOKEN }}"
+          pattern: "./dist/**/*"
+          minimum-change-threshold: 200
+        env:
+          CHUNK_NAME: full

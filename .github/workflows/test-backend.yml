@@ -7,8 +7,12 @@ env:
   DATABASE_URL: "postgresql://tsukiyo:github@db/test"
 
 jobs:
-  test-backend:
+  run-tests:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./backend
+
     services:
       db:
         image: postgres:12
