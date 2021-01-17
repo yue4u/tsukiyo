@@ -2,6 +2,9 @@ name: Test frontend
 
 on: [pull_request]
 
+env:
+  HUSKY: 0
+
 jobs:
   run-tests:
     runs-on: ubuntu-latest
