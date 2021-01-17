@@ -1,9 +1,15 @@
 # development
 FROM node as develop
-WORKDIR /app
+
+# see https://stackoverflow.com/a/52092711
+RUN mkdir /cache
+WORKDIR /cache
+
 COPY package*.json ./
 RUN yarn install
-COPY . .
+
+RUN mkdir /app
+WORKDIR /app
 
 # build
 FROM develop as build

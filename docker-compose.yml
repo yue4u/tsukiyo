@@ -20,7 +20,7 @@ services:
       - "3000:3000"
     volumes:
       - "./frontend:/app"
-    command: /bin/sh -c "yarn dev"
+    command: /bin/sh -c "cp -r /cache/node_modules/. /app/node_modules && yarn dev"
 
   backend:
     container_name: tsukiyo_backend
