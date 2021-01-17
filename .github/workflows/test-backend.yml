@@ -7,16 +7,13 @@ env:
   DATABASE_URL: "postgresql://tsukiyo:github@db/test"
 
 jobs:
-  test-all:
+  test-backend:
     runs-on: ubuntu-latest
     services:
       db:
         image: postgres:12
         ports:
           - "5432:5432"
-        volumes:
-          - ./docker/db/initdb:/docker-entrypoint-initdb.d
-          - ./docker/db/data:/var/lib/postgresql/data
         env:
           POSTGRES_USER: tsukiyo
           POSTGRES_PASSWORD: github
