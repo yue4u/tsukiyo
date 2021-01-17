@@ -3,8 +3,6 @@ mod events;
 mod gql;
 mod redis;
 mod schema;
-mod schema_gql;
-
 #[macro_use]
 extern crate diesel;
 extern crate dotenv;
@@ -43,7 +41,7 @@ async fn main() -> std::io::Result<()> {
     HttpServer::new(move || {
         App::new()
             .data(pool.clone())
-            .configure(gql::register)
+            .configure(gql::controller::register)
             .service(hello)
             .service(echo)
             .service(events::controller::scope())

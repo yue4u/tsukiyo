@@ -2,8 +2,8 @@ use actix_web::{web, HttpResponse, Responder};
 use juniper::http::graphiql::graphiql_source;
 use juniper::http::GraphQLRequest;
 
+use super::schema::{create_schema, Schema};
 use crate::db::Pool;
-use crate::schema_gql::{create_schema, Schema};
 use crate::Context;
 
 pub(crate) async fn graphql(
