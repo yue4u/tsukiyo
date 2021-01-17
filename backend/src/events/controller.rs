@@ -42,7 +42,11 @@ async fn delete(pool: web::Data<Pool>, event_id: web::Json<i32>) -> impl Respond
 }
 
 async fn list(pool: web::Data<Pool>) -> impl Responder {
-    let events = super::service::list(pool.get().expect("couldn't get db connection from pool"))
-        .expect("failed to list event");
+    // TODO: fix this
+    let events = super::service::list(
+        pool.get().expect("couldn't get db connection from pool"),
+        None,
+    )
+    .expect("failed to list event");
     serde_json::to_string(&events)
 }

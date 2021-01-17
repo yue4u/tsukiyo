@@ -23,9 +23,21 @@ pub fn delete(conn: Conn, event_id: i32) -> QueryResult<Event> {
     diesel::delete(events.filter(id.eq(event_id))).get_result(&conn)
 }
 
-pub fn list(conn: Conn) -> QueryResult<Vec<Event>> {
-    events
-        .filter(published.eq(true))
-        .limit(5)
-        .load::<Event>(&conn)
+pub fn list(conn: Conn, by: Option<EventQuery>) -> QueryResult<Vec<Event>> {
+    let mut query = events::table.into_boxed();
+    if let Some(by_event) = by {
+        if let Some(_published) = by_event.published {
+            query = query.filter(events::published.eq(_published));
+        }
+        if let Some(_genre) = by_event.genre {
+            query = query.filter(events::genre.eq(_genre));
+        }
+        if let Some(_tag) = by_event.tag {
+            query = query.filter(events::genre.eq(_tag));
+        }
+        if let Some(_limit) = by_event.limit {
+            query = query.limit(_limit as i64);
+        }
+    }
+    query.load(&conn)
 }

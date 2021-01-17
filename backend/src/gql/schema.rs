@@ -1,6 +1,6 @@
 use crate::events::{
     self,
-    model::{Event, EventInput, EventUpdate},
+    model::{Event, EventInput, EventQuery, EventUpdate},
 };
 use crate::Context;
 use juniper::FieldResult;
@@ -23,9 +23,9 @@ impl Query {
         Ok(event)
     }
 
-    fn events(context: &Context) -> FieldResult<Vec<Event>> {
+    fn events(context: &Context, by: Option<EventQuery>) -> FieldResult<Vec<Event>> {
         let conn = context.pool.get()?;
-        let events = crate::events::service::list(conn)?;
+        let events = crate::events::service::list(conn, by)?;
         Ok(events)
     }
 }
@@ -41,16 +41,10 @@ impl Mutation {
         let event = events::service::create(conn, event)?;
         Ok(event)
     }
-    fn set_event_publish(context: &Context, event_id: i32, published: bool) -> FieldResult<Event> {
+
+    fn update_event(context: &Context, id: i32, update: EventUpdate) -> FieldResult<Event> {
         let conn = context.pool.get()?;
-        let event = events::service::update(
-            conn,
-            event_id,
-            EventUpdate {
-                published: Some(published),
-                ..Default::default()
-            },
-        )?;
+        let event = events::service::update(conn, id, update)?;
         Ok(event)
     }
 }

@@ -67,7 +67,7 @@ pub struct EventInput {
     pub memo: Option<String>,
 }
 
-#[derive(Debug, Default, Insertable, AsChangeset, Serialize, Deserialize)]
+#[derive(Debug, Default, Insertable, AsChangeset, Serialize, Deserialize, GraphQLInputObject)]
 #[table_name = "events"]
 pub struct EventUpdate {
     pub slug: Option<String>,
@@ -85,6 +85,14 @@ pub struct EventUpdate {
     pub updated_at: Option<NaiveDateTime>,
     pub published: Option<bool>,
     pub memo: Option<String>,
+}
+
+#[derive(Debug, Default, Serialize, Deserialize, GraphQLInputObject)]
+pub struct EventQuery {
+    pub genre: Option<String>,
+    pub tag: Option<String>,
+    pub published: Option<bool>,
+    pub limit: Option<i32>,
 }
 
 // pub fn seed() {
