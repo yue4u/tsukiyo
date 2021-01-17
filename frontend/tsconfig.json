@@ -3,12 +3,17 @@
     "target": "esnext",
     "module": "esnext",
     "moduleResolution": "node",
+    "esModuleInterop": true,
     "strict": true,
     "jsx": "preserve",
     "sourceMap": true,
     "lib": ["esnext", "dom"],
     "types": ["vite/client"],
-    "plugins": [{ "name": "@vuedx/typescript-plugin-vue" }]
+    "plugins": [{ "name": "@vuedx/typescript-plugin-vue" }],
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./*"]
+    }
   },
-  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"]
+  "include": ["./**/*.ts", "./**/*.d.ts", "./**/*.tsx", "./**/*.vue", "main.ts"]
 }
