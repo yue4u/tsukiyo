@@ -45,6 +45,12 @@ impl Mutation {
         let event = events::service::update(conn, id, update)?;
         Ok(event)
     }
+
+    fn delete_event(context: &Context, id: i32) -> FieldResult<Event> {
+        let conn = context.pool.get()?;
+        let event = events::service::delete(conn, id).expect("failed to delete event");
+        Ok(event)
+    }
 }
 
 pub(crate) type Schema = juniper::RootNode<'static, Query, Mutation, EmptySubscription<Context>>;
