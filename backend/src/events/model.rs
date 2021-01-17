@@ -27,10 +27,30 @@ pub struct Event {
 
 #[derive(Debug, Default, Insertable, Serialize, Deserialize)]
 #[table_name = "events"]
-pub struct NewEvent {
+pub struct EventInput {
     pub slug: Option<String>,
     pub title: String,
     pub body: String,
+    pub genre: Option<String>,
+    pub tag: Option<String>,
+    pub fee: Option<i32>,
+    pub ogp_img: Option<String>,
+    pub start_time: Option<SystemTime>,
+    pub end_time: Option<SystemTime>,
+    pub publish_time: Option<SystemTime>,
+    pub page_view: Option<i32>,
+    pub creator_id: Option<i32>,
+    pub updated_at: Option<SystemTime>,
+    pub memo: Option<String>,
+}
+
+#[derive(Debug, Default, Insertable, Serialize, Deserialize)]
+#[table_name = "events"]
+pub struct EventUpdate {
+    pub id: i32,
+    pub slug: Option<String>,
+    pub title: Option<String>,
+    pub body: Option<String>,
     pub genre: Option<String>,
     pub tag: Option<String>,
     pub fee: Option<i32>,
