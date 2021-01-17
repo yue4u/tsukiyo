@@ -75,4 +75,7 @@ install [Google Cloud SDK](https://cloud.google.com/sdk/docs/install)
 
 ```
 curl https://sdk.cloud.google.com | bash
+
+gcloud config set project tsukiyo
+gcloud config set run/region asia-northeast1
 ```

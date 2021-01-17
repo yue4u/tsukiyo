@@ -1,2 +1,14 @@
 docker
 *.log
+
+.DS_Store
+*.local
+
+# Editor directories and files
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

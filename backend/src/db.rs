@@ -15,3 +15,13 @@ pub fn create_pool() -> Pool {
         .build(manager)
         .expect("Failed to create pool.")
 }
+
+#[cfg(test)]
+mod test {
+    use super::*;
+
+    #[test]
+    fn test_connection() {
+        assert!(create_pool().get().is_ok())
+    }
+}

@@ -1,0 +1,48 @@
+name: Test frontend
+
+on: [push]
+
+jobs:
+  run-tests:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./frontend
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 1
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: "12.x"
+
+      - name: Cache node modules
+        uses: actions/cache@v2
+        id: cache-yarn
+        with:
+          path: "**/node_modules"
+          key: ${{ runner.OS }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.OS }}-yarn-
+
+      - name: Install deps
+        if: steps.cache-yarn.outputs.cache-hit != 'true'
+        run: yarn
+
+      - name: Test Lint
+        run: yarn lint
+
+      - name: Test Jest
+        run: yarn test:unit
+
+      - name: Test Build
+        uses: preactjs/compressed-size-action@v2
+        with:
+          repo-token: "${{ secrets.GITHUB_TOKEN }}"
+          pattern: "./dist/**/*"
+          minimum-change-threshold: 200
+        env:
+          CHUNK_NAME: full
