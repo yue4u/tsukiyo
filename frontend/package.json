@@ -10,8 +10,10 @@
     "test:e2e": "vue-cli-service test:e2e",
     "lint": "vue-cli-service lint"
   },
-  "hooks": {
-    "pre-commit": "yarn lint && yarn test:unit"
+  "husky": {
+    "hooks": {
+      "pre-commit": "yarn lint && yarn test:unit"
+    }
   },
   "dependencies": {
     "register-service-worker": "^1.7.2",
