@@ -2,7 +2,6 @@
   "name": "frontend",
   "version": "0.0.0",
   "scripts": {
-    "postinstall": "husky install",
     "dev": "vite",
     "build": "vite build",
     "test:type": "vuedx-typecheck .",
