@@ -3,33 +3,29 @@ use crate::db::Conn;
 use crate::schema::events::{self, dsl::*};
 use diesel::prelude::*;
 
-pub fn create(conn: Conn, event: EventInput) -> String {
+pub fn get(conn: Conn, event_id: i32) -> QueryResult<Event> {
+    events.filter(id.eq(event_id)).get_result(&conn)
+}
+
+pub fn create(conn: Conn, event: EventInput) -> QueryResult<Event> {
     diesel::insert_into(events::table)
         .values(&event)
         .get_result::<Event>(&conn)
-        .expect("Error saving new post");
-    "ok".to_string()
 }
 
-pub fn update(conn: Conn, event: EventUpdate) -> String {
-    diesel::delete(events.filter(id.eq(event.id)))
-        .execute(&conn)
-        .expect("Error delete new post");
-    "ok".to_string()
+pub fn update(conn: Conn, event_id: i32, event: EventUpdate) -> QueryResult<Event> {
+    diesel::update(events.filter(id.eq(event_id)))
+        .set(&event)
+        .get_result(&conn)
 }
 
-pub fn delete(conn: Conn, event_id: i32) -> String {
-    diesel::delete(events.filter(id.eq(event_id)))
-        .execute(&conn)
-        .expect("Error delete new post");
-    "ok".to_string()
+pub fn delete(conn: Conn, event_id: i32) -> QueryResult<Event> {
+    diesel::delete(events.filter(id.eq(event_id))).get_result(&conn)
 }
 
-pub fn list(conn: Conn) -> String {
-    let results = events
+pub fn list(conn: Conn) -> QueryResult<Vec<Event>> {
+    events
         .filter(published.eq(true))
         .limit(5)
         .load::<Event>(&conn)
-        .expect("Error loading events");
-    serde_json::to_string(&results).unwrap()
 }

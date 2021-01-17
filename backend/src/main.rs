@@ -1,7 +1,9 @@
 mod db;
 mod events;
+mod gql;
 mod redis;
 mod schema;
+mod schema_gql;
 
 #[macro_use]
 extern crate diesel;
@@ -29,12 +31,19 @@ async fn manual_hello() -> impl Responder {
     HttpResponse::Ok().body("Hey there!")
 }
 
+pub(crate) struct Context {
+    pool: db::Pool,
+}
+
+impl juniper::Context for Context {}
+
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     let pool = db::create_pool();
     HttpServer::new(move || {
         App::new()
             .data(pool.clone())
+            .configure(gql::register)
             .service(hello)
             .service(echo)
             .service(events::controller::scope())
