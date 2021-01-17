@@ -12,8 +12,8 @@
 - actix https://actix.rs/
 - graphql https://graphql.org/
 - DAL http://diesel.rs/
-- reverse proxy https://www.nginx.com/
-- cache / limit redis https://redis.io/
+- <del> reverse proxy https://www.nginx.com/ </del>
+- <del> cache / limit redis https://redis.io/ </del>
 
 ## データベース
 
@@ -65,4 +65,14 @@ inside container:
 ```sh
 diesel setup
 diesel migration run
+```
+
+# deploy
+
+using `cloud storage` + `cloud run` + `cloud sql`
+
+install [Google Cloud SDK](https://cloud.google.com/sdk/docs/install)
+
+```
+curl https://sdk.cloud.google.com | bash
 ```
