@@ -3,10 +3,10 @@ use diesel::r2d2::{self, ConnectionManager};
 use dotenv::dotenv;
 use std::env;
 
-pub type DBPool = r2d2::Pool<ConnectionManager<PgConnection>>;
-pub type DBConn = r2d2::PooledConnection<ConnectionManager<PgConnection>>;
+pub type Pool = r2d2::Pool<ConnectionManager<PgConnection>>;
+pub type Conn = r2d2::PooledConnection<ConnectionManager<PgConnection>>;
 
-pub fn create_pool() -> DBPool {
+pub fn create_pool() -> Pool {
     dotenv().ok();
 
     let database_url = env::var("DATABASE_URL").expect("DATABASE_URL must be set");
