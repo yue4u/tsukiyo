@@ -67,6 +67,15 @@ diesel setup
 diesel migration run
 ```
 
+## api endpoints
+
+| path      |                    |
+| --------- | ------------------ |
+| /graphiql | graphiql inspector |
+| /graphql  | graphql endpoint   |
+
+current REST api path under `/event` will be deleted soon.
+
 # deploy
 
 using `cloud storage` + `cloud run` + `cloud sql`
