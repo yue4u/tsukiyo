@@ -44,5 +44,6 @@ jobs:
           repo-token: "${{ secrets.GITHUB_TOKEN }}"
           pattern: "./dist/**/*"
           minimum-change-threshold: 200
+          cwd: ./frontend
         env:
           CHUNK_NAME: full
