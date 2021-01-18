@@ -1,21 +1,21 @@
-use actix_web::{web, HttpResponse, Responder};
+use actix_web::{web, HttpRequest, HttpResponse, Responder};
 use juniper::http::graphiql::graphiql_source;
 use juniper::http::GraphQLRequest;
 
 use super::schema::{create_schema, Schema};
 use crate::Context;
-use crate::{jwt, sql::db::Pool};
+use crate::{auth, sql::db::Pool};
 
 pub(crate) async fn graphql(
+    req: HttpRequest,
     pool: web::Data<Pool>,
     schema: web::Data<Schema>,
     data: web::Json<GraphQLRequest>,
-    user: Option<jwt::User>,
 ) -> impl Responder {
     let ctx = Context {
         pool: pool.get_ref().to_owned(),
+        user: auth::get_user(&req).await.ok(),
     };
-    println!("get user {:?}", user);
     let res = data.execute(&schema, &ctx).await;
     serde_json::to_string(&res).expect("failed to get data")
 }

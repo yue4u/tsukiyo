@@ -2,7 +2,7 @@ use crate::events::{
     self,
     model::{Event, EventInput, EventQuery, EventUpdate},
 };
-use crate::Context;
+use crate::{auth::User, Context};
 use juniper::FieldResult;
 use juniper::{graphql_object, EmptySubscription};
 
@@ -15,6 +15,11 @@ impl Query {
     fn api_version() -> &str {
         "0.1"
     }
+
+    fn me(context: &Context) -> FieldResult<Option<User>> {
+        Ok(context.user.clone())
+    }
+
     fn event(context: &Context, id: i32) -> FieldResult<Event> {
         let conn = context.pool.get()?;
         let event = events::service::get(conn, id)?;
