@@ -14,7 +14,7 @@
 <script setup lang="ts">
 import { ref, reactive } from "vue";
 import { app } from "@/utils/auth";
-import type { User } from "./auth";
+import type { User } from "@/utils/auth";
 
 const email = ref("");
 const password = ref("");
