@@ -71,7 +71,3 @@ pub struct EventQuery {
     pub published: Option<bool>,
     pub limit: Option<i32>,
 }
-
-// pub fn seed() {
-//     super::service::create("demo event", "demo event");
-// }

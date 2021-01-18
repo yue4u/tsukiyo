@@ -1,13 +1,19 @@
+mod auth;
 mod events;
 mod gql;
 mod sql;
+mod utils;
+
 #[macro_use]
 extern crate diesel;
 use actix_cors::Cors;
 use actix_web::{http::header, middleware::Logger, App, HttpServer};
 
+pub const ADMIN_CONFIG: &'static str = include_str!("../admin-config.json");
+
 pub(crate) struct Context {
     pool: sql::db::Pool,
+    user: Option<auth::User>,
 }
 
 impl juniper::Context for Context {}
