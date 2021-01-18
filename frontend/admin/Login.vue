@@ -13,7 +13,7 @@
 
 <script setup lang="ts">
 import { ref, reactive } from "vue";
-import { app } from "./auth";
+import { app } from "@/utils/auth";
 import type { User } from "./auth";
 
 const email = ref("");

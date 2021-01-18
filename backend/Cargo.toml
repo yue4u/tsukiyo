@@ -18,3 +18,5 @@ serde_derive = "1.0"
 dotenv = "0.15.0"
 redis = { version = "0.17.0", features = ["tokio-comp"] }
 juniper = { git = "https://github.com/graphql-rust/juniper" }
+jsonwebtoken = "7"
+futures-util = { version = "0.3.7", default-features = false }
