@@ -1,8 +1,4 @@
 <template>
-  <div id="nav">
-    <router-link to="/">Home</router-link> |
-    <router-link to="/admin/event-editor">Event editor</router-link>
-  </div>
   <router-view />
 </template>
 
