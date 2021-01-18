@@ -4,3 +4,4 @@ dist
 dist-ssr
 e2e/videos/
 e2e/screenshots/
+.env
