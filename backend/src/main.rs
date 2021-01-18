@@ -16,8 +16,6 @@ pub(crate) struct Context {
     user: Option<auth::User>,
 }
 
-impl juniper::Context for Context {}
-
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     let pool = sql::db::create_pool();

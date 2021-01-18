@@ -3,6 +3,7 @@ use chrono::prelude::NaiveDateTime;
 use juniper::{GraphQLInputObject, GraphQLObject};
 use serde::{Deserialize, Serialize};
 use std::default::Default;
+
 #[derive(Queryable, Serialize, Deserialize, GraphQLObject)]
 #[graphql(description = "An bar event")]
 pub struct Event {

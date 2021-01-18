@@ -3,8 +3,9 @@ use crate::events::{
     model::{Event, EventInput, EventQuery, EventUpdate},
 };
 use crate::{auth::User, Context};
-use juniper::FieldResult;
-use juniper::{graphql_object, EmptySubscription};
+use juniper::{graphql_object, EmptySubscription, FieldResult};
+
+impl juniper::Context for Context {}
 
 pub(crate) struct Query;
 

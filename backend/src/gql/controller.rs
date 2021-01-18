@@ -1,6 +1,5 @@
 use actix_web::{web, HttpRequest, HttpResponse, Responder};
-use juniper::http::graphiql::graphiql_source;
-use juniper::http::GraphQLRequest;
+use juniper::http::{graphiql::graphiql_source, GraphQLRequest};
 
 use super::schema::{create_schema, Schema};
 use crate::Context;
