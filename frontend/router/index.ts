@@ -8,6 +8,12 @@ const routes: Array<RouteRecordRaw> = [
     component: Home,
   },
   {
+    path: "/admin/login",
+    name: "Login",
+    component: () =>
+      import(/* webpackChunkName: "Login" */ "@/admin/Login.vue"),
+  },
+  {
     path: "/admin/event-editor",
     name: "About",
     component: () =>

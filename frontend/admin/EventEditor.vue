@@ -115,15 +115,14 @@ const { executeMutation: createEvent } = useMutation(`
 </script>
 
 <style lang="scss" scoped>
+@import "../assets/base.scss";
+
 .form {
   margin: 0 auto;
   max-width: 1000px;
   display: grid;
   gap: 1rem;
   grid-template-columns: 1fr 1fr;
-}
-.full {
-  grid-column: span 2;
 }
 .create {
   outline: none;
