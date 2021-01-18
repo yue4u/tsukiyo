@@ -30,7 +30,6 @@ async fn main() -> std::io::Result<()> {
             .wrap(Logger::default())
             .data(pool.clone())
             .configure(gql::controller::register)
-            .service(events::controller::scope())
     })
     .bind("0.0.0.0:4000")?
     .run()

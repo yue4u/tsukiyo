@@ -74,8 +74,6 @@ diesel migration run
 | /graphiql | graphiql inspector |
 | /graphql  | graphql endpoint   |
 
-current REST api path under `/event` will be deleted soon.
-
 # deploy
 
 using `cloud storage` + `cloud run` + `cloud sql`
