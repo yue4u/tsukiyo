@@ -44,7 +44,7 @@ jobs:
           repo-token: "${{ secrets.GITHUB_TOKEN }}"
           pattern: "./dist/**/*"
           minimum-change-threshold: 200
-          strip-hash: "\\.(\\w+)\\.js$"
+          strip-hash: "\\.(\\w+)\\..+?$$"
           cwd: ./frontend
         env:
           CHUNK_NAME: full
