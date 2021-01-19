@@ -2,10 +2,9 @@ use crate::utils::MessageError;
 use actix_web::HttpRequest;
 use jsonwebtoken::{decode, decode_header, Algorithm::RS256, DecodingKey, Validation};
 use juniper::GraphQLObject;
+use once_cell::sync::Lazy;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
-
-use once_cell::sync::Lazy;
 
 #[derive(Clone, Debug, Deserialize)]
 struct AdminConfig {
@@ -16,18 +15,35 @@ struct AdminConfig {
     pub client_id: String,
 }
 
-static ADMIN_CONFIG: Lazy<AdminConfig> = Lazy::new(|| {
-    serde_json::from_str(&std::env::var("ADMIN_CONFIG").unwrap())
-        .expect("admin config is can not be serialize")
+#[derive(Clone, Debug)]
+struct AuthConstraints {
+    admin_config: AdminConfig,
+    validation: Validation,
+}
+
+static AUTH_CONSTRAINTS: Lazy<AuthConstraints> = Lazy::new(|| {
+    let admin_config = serde_json::from_str::<AdminConfig>(&std::env::var("ADMIN_CONFIG").unwrap())
+        .expect("admin config is can not be serialize");
+
+    let mut validation = Validation::new(RS256);
+    let iss = format!("https://securetoken.google.com/{}", admin_config.project_id);
+    validation.iss = Some(iss.clone());
+    validation.set_audience(&[&admin_config.project_id]);
+
+    AuthConstraints {
+        admin_config,
+        validation,
+    }
 });
 
 #[derive(Debug, Serialize, Deserialize)]
 struct Claims {
-    pub aud: String,
-    pub iat: i64,
-    pub exp: i64,
-    pub iss: String,
-    pub sub: String,
+    aud: String,
+    iat: i64,
+    exp: i64,
+    iss: String,
+    sub: String,
+    auth_time: i64,
 }
 
 #[derive(Clone, Deserialize, Serialize, Debug, GraphQLObject)]
@@ -38,6 +54,7 @@ pub struct User {
 const CLIENT_CERT_URL: &'static str =
     "https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com";
 
+/// following steps in https://firebase.google.com/docs/auth/admin/verify-id-tokens#verify_id_tokens_using_a_third-party_jwt_library
 pub async fn get_user(req: &HttpRequest) -> anyhow::Result<User> {
     let token = req
         .headers()
@@ -52,41 +69,43 @@ pub async fn get_user(req: &HttpRequest) -> anyhow::Result<User> {
         return Err(MessageError::new("alg mismatch").into());
     }
     let kid = header.kid.ok_or(MessageError::new("message"))?;
-    let key_content = actix_web::client::Client::default()
+    let now = chrono::Utc::now().timestamp();
+    let keys = actix_web::client::Client::default()
         .get(CLIENT_CERT_URL)
         .send()
         .await
         .map_err(|e| MessageError::new(&format!("{:?}", e)))?
         .json::<HashMap<String, String>>()
-        .await?
-        .get(&kid)
-        .ok_or(MessageError::new("key not found"))?
-        // hack for https://github.com/Keats/jsonwebtoken not supporting `CERTIFICATE` as tag name
-        .replace("CERTIFICATE", "PUBLIC KEY");
+        .await?;
+    let x509_pem = keys.get(&kid).ok_or(MessageError::new("key not found"))?;
 
-    let key = DecodingKey::from_rsa_pem(key_content.as_bytes())?;
+    // see https://github.com/Keats/jsonwebtoken/issues/127#issuecomment-753403072
+    let pem_bytes = openssl::x509::X509::from_pem(x509_pem.as_bytes())?
+        .public_key()?
+        .rsa()?
+        .public_key_to_pem()?;
+    let key = DecodingKey::from_rsa_pem(pem_bytes.as_slice())?;
 
-    let mut validation = Validation::new(RS256);
-    let iss = format!("https://securetoken.google.com/{}", ADMIN_CONFIG.project_id);
-    validation.iss = Some(iss.clone());
-    validation.set_audience(&[&ADMIN_CONFIG.project_id]);
-
-    let claims = decode::<Claims>(&token, &key, &validation)?.claims;
-    let now = chrono::Utc::now().timestamp();
-    let verified = [
+    let claims = decode::<Claims>(&token, &key, &AUTH_CONSTRAINTS.validation)?.claims;
+    // this could be done in `Validation` object in the jsonwebtoken lib
+    // but it need some data structure like Option<HashSet<String>>
+    // which seems it's easier just check it by ourselves
+    //
+    // iat	Issued-at time	Must be in the past. The time is measured in seconds since the UNIX epoch.
+    let verified = claims.iat < now
         // exp	Expiration time	Must be in the future. The time is measured in seconds since the UNIX epoch.
-        claims.exp > now,
-        // iat	Issued-at time	Must be in the past. The time is measured in seconds since the UNIX epoch.
-        claims.iat < now,
+        // already checked
+        // && claims.exp > now
         // aud	Audience	Must be your Firebase project ID, the unique identifier for your Firebase project, which can be found in the URL of that project's console.
-        &claims.aud == &ADMIN_CONFIG.project_id,
+        // already checked
+        // && &claims.aud == &AUTH_CONSTRAINTS.admin_config.project_id
         // iss	Issuer	Must be "https://securetoken.google.com/<projectId>", where <projectId> is the same project ID used for aud above.
-        &claims.iss == &iss,
+        // already checked
+        // && &claims.iss == &iss
         // sub	Subject	Must be a non-empty string and must be the uid of the user or device.
-        !claims.sub.is_empty(),
-    ]
-    .iter()
-    .fold(true, |acc, &check| acc && check);
+        && !claims.sub.is_empty()
+        // auth_time Authentication time Must be in the past. The time when the user authenticated. 
+        && claims.auth_time < now;
     if verified {
         Ok(User { uid: claims.sub })
     } else {
