@@ -17,6 +17,7 @@ pub(crate) struct Context {
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     let pool = sql::db::create_pool();
+
     HttpServer::new(move || {
         App::new()
             .wrap(

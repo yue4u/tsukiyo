@@ -4,7 +4,8 @@ use jsonwebtoken::{decode, decode_header, Algorithm::RS256, DecodingKey, Validat
 use juniper::GraphQLObject;
 use once_cell::sync::Lazy;
 use serde::{Deserialize, Serialize};
-use std::collections::HashMap;
+
+mod certs;
 
 #[derive(Clone, Debug, Deserialize)]
 struct AdminConfig {
@@ -51,9 +52,6 @@ pub struct User {
     pub uid: String,
 }
 
-const CLIENT_CERT_URL: &'static str =
-    "https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com";
-
 /// following steps in https://firebase.google.com/docs/auth/admin/verify-id-tokens#verify_id_tokens_using_a_third-party_jwt_library
 pub async fn get_user(req: &HttpRequest) -> anyhow::Result<User> {
     let token = req
@@ -70,21 +68,13 @@ pub async fn get_user(req: &HttpRequest) -> anyhow::Result<User> {
     }
     let kid = header.kid.ok_or(MessageError::new("message"))?;
     let now = chrono::Utc::now().timestamp();
-    let keys = actix_web::client::Client::default()
-        .get(CLIENT_CERT_URL)
-        .send()
-        .await
-        .map_err(|e| MessageError::new(&format!("{:?}", e)))?
-        .json::<HashMap<String, String>>()
-        .await?;
-    let x509_pem = keys.get(&kid).ok_or(MessageError::new("key not found"))?;
 
-    // see https://github.com/Keats/jsonwebtoken/issues/127#issuecomment-753403072
-    let pem_bytes = openssl::x509::X509::from_pem(x509_pem.as_bytes())?
-        .public_key()?
-        .rsa()?
-        .public_key_to_pem()?;
-    let key = DecodingKey::from_rsa_pem(pem_bytes.as_slice())?;
+    let mut resolver = certs::CERTS_RESOLVER
+        .lock()
+        .ok()
+        .ok_or(MessageError::new("failed obtain mutex"))?;
+    let pem = resolver.get(&kid, now).await?;
+    let key = DecodingKey::from_rsa_pem(pem.as_slice())?;
 
     let claims = decode::<Claims>(&token, &key, &AUTH_CONSTRAINTS.validation)?.claims;
     // this could be done in `Validation` object in the jsonwebtoken lib
