@@ -7,7 +7,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import MainVisual from "./MainVisual.vue";
 import Sentence from "./Sentence.vue";
 

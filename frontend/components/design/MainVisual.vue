@@ -16,7 +16,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import Nav from "./Nav.vue";
 
 export default {

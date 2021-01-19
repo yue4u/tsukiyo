@@ -8,7 +8,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 export default {
   data() {
     return {
@@ -19,7 +19,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .under {
   line-height: 3em;
   border-bottom: 1px solid #fff;
