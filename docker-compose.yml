@@ -35,6 +35,8 @@ services:
       - ./backend:/app
       - cargo-cache:/usr/local/cargo/registry
       - target-cache:/app/target
+    env_file:
+      - ./backend/.env
     environment:
       DATABASE_URL: "postgresql://tsukiyo:qtJqYM7bFfjtrew@db/development"
     command: /bin/sh -c "cargo watch -x run"

@@ -5,6 +5,7 @@ on: [push]
 env:
   CARGO_TERM_COLOR: always
   DATABASE_URL: "postgresql://tsukiyo:github@localhost/test"
+  ADMIN_CONFIG: "{}"
 
 jobs:
   run-tests:
@@ -41,11 +42,10 @@ jobs:
             target
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
 
-      - name: Build
+          - name: Build
         run: |
-          touch admin-config.json
-          cargo build --verbose
-
+          cargo check --verbose
+          
       - name: Run tests
         run: cargo test --verbose
 

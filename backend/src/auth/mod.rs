@@ -1,22 +1,14 @@
 use crate::utils::MessageError;
-use crate::ADMIN_CONFIG;
 use actix_web::HttpRequest;
 use jsonwebtoken::{decode, decode_header, Algorithm::RS256, DecodingKey, Validation};
 use juniper::GraphQLObject;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
-#[derive(Debug, Serialize, Deserialize)]
-pub struct Claims {
-    pub aud: String,
-    pub iat: i64,
-    pub exp: i64,
-    pub iss: String,
-    pub sub: String,
-}
+use once_cell::sync::Lazy;
 
 #[derive(Clone, Debug, Deserialize)]
-pub struct AdminConfig {
+struct AdminConfig {
     pub project_id: String,
     pub private_key_id: String,
     pub private_key: String,
@@ -24,11 +16,20 @@ pub struct AdminConfig {
     pub client_id: String,
 }
 
-impl AdminConfig {
-    pub fn new() -> AdminConfig {
-        serde_json::from_str(ADMIN_CONFIG).expect("admin config is can not be serialize")
-    }
+static ADMIN_CONFIG: Lazy<AdminConfig> = Lazy::new(|| {
+    serde_json::from_str(&std::env::var("ADMIN_CONFIG").unwrap())
+        .expect("admin config is can not be serialize")
+});
+
+#[derive(Debug, Serialize, Deserialize)]
+struct Claims {
+    pub aud: String,
+    pub iat: i64,
+    pub exp: i64,
+    pub iss: String,
+    pub sub: String,
 }
+
 #[derive(Clone, Deserialize, Serialize, Debug, GraphQLObject)]
 pub struct User {
     pub uid: String,
@@ -46,19 +47,18 @@ pub async fn get_user(req: &HttpRequest) -> anyhow::Result<User> {
         .strip_prefix("Bearer ")
         .ok_or(MessageError::new("Authorization header is illegal"))?
         .to_string();
-    let res = actix_web::client::Client::default()
-        .get(CLIENT_CERT_URL)
-        .send()
-        .await
-        .map_err(|e| MessageError::new(&format!("{:?}", e)))?
-        .json::<HashMap<String, String>>()
-        .await?;
     let header = decode_header(&token)?;
     if header.alg != RS256 {
         return Err(MessageError::new("alg mismatch").into());
     }
     let kid = header.kid.ok_or(MessageError::new("message"))?;
-    let key_content = res
+    let key_content = actix_web::client::Client::default()
+        .get(CLIENT_CERT_URL)
+        .send()
+        .await
+        .map_err(|e| MessageError::new(&format!("{:?}", e)))?
+        .json::<HashMap<String, String>>()
+        .await?
         .get(&kid)
         .ok_or(MessageError::new("key not found"))?
         // hack for https://github.com/Keats/jsonwebtoken not supporting `CERTIFICATE` as tag name
@@ -66,11 +66,10 @@ pub async fn get_user(req: &HttpRequest) -> anyhow::Result<User> {
 
     let key = DecodingKey::from_rsa_pem(key_content.as_bytes())?;
 
-    let config = AdminConfig::new();
     let mut validation = Validation::new(RS256);
-    let iss = format!("https://securetoken.google.com/{}", config.project_id);
+    let iss = format!("https://securetoken.google.com/{}", ADMIN_CONFIG.project_id);
     validation.iss = Some(iss.clone());
-    validation.set_audience(&[&config.project_id]);
+    validation.set_audience(&[&ADMIN_CONFIG.project_id]);
 
     let claims = decode::<Claims>(&token, &key, &validation)?.claims;
     let now = chrono::Utc::now().timestamp();
@@ -80,7 +79,7 @@ pub async fn get_user(req: &HttpRequest) -> anyhow::Result<User> {
         // iat	Issued-at time	Must be in the past. The time is measured in seconds since the UNIX epoch.
         claims.iat < now,
         // aud	Audience	Must be your Firebase project ID, the unique identifier for your Firebase project, which can be found in the URL of that project's console.
-        &claims.aud == &config.project_id,
+        &claims.aud == &ADMIN_CONFIG.project_id,
         // iss	Issuer	Must be "https://securetoken.google.com/<projectId>", where <projectId> is the same project ID used for aud above.
         &claims.iss == &iss,
         // sub	Subject	Must be a non-empty string and must be the uid of the user or device.
