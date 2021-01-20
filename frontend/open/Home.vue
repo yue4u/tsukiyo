@@ -2,19 +2,12 @@
   <Main />
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 // this is caused by <script setup>, looks vetur does not support it for now
 // @ts-ignore
 import EventList from "@/components/EventList.vue";
+// @ts-ignore
 import Main from "@/components/design/Main.vue";
-
-export default {
-  name: "home",
-  components: {
-    EventList,
-    Main,
-  },
-};
 </script>
 
 <style>

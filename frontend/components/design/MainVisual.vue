@@ -12,16 +12,11 @@
         <div class="text-8xl leading-tight">月夜のけだもの</div>
       </div>
     </div>
-    <Nav />
+    <Nav position="right" />
   </div>
 </template>
 
 <script setup lang="ts">
+// @ts-ignore
 import Nav from "./Nav.vue";
-
-export default {
-  components: {
-    Nav,
-  },
-};
 </script>

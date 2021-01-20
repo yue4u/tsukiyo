@@ -9,14 +9,8 @@
 </template>
 
 <script setup lang="ts">
-export default {
-  data() {
-    return {
-      text:
-        "紹介文紹介文紹介文紹介文紹介文紹介文紹介文紹介文紹介文紹介文紹介文紹介文紹介文紹介文紹介文紹介文紹介文",
-    };
-  },
-};
+const text =
+  "紹介文紹介文紹介文紹介文紹介文紹介文紹介文紹介文紹介文紹介文紹介文紹介文紹介文紹介文紹介文紹介文紹介文";
 </script>
 
 <style scoped>
