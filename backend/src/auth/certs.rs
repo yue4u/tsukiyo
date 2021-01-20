@@ -1,4 +1,4 @@
-use crate::utils::MessageError;
+use crate::utils::{MessageError, OrMessageError};
 use once_cell::sync::Lazy;
 use serde::Deserialize;
 use std::{
@@ -39,9 +39,7 @@ impl CertsResolver {
             self.certs.clear();
             self.fetch().await?;
         }
-        self.certs
-            .get(id)
-            .ok_or(MessageError::new("no cert is found").into())
+        Ok(self.certs.get(id).or_error("no cert is found")?)
     }
 
     async fn fetch(&mut self) -> anyhow::Result<()> {
@@ -55,9 +53,10 @@ impl CertsResolver {
             + res
                 .headers()
                 .get("Cache-Control")
-                .ok_or(MessageError::new("Cache-Control is not provided"))?
+                .or_error("Cache-Control is not provided")?
                 .to_str()?
                 .split(',')
+                // try_find is not unstable
                 .fold(None, |acc, curr| {
                     if acc.is_some() {
                         acc
@@ -65,7 +64,7 @@ impl CertsResolver {
                         curr.trim().strip_prefix("max-age=")
                     }
                 })
-                .ok_or(MessageError::new("max age is not found"))?
+                .or_error("max age is not found")?
                 .parse::<i64>()?;
         for (kid, x509_pem) in res.json::<HashMap<String, String>>().await?.into_iter() {
             // see https://github.com/Keats/jsonwebtoken/issues/127#issuecomment-753403072

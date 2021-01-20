@@ -11,7 +11,7 @@ impl fmt::Display for MessageError {
 }
 
 impl MessageError {
-    pub fn new(message: &str) -> Self {
+    pub fn new(message: impl ToString) -> Self {
         Self {
             message: message.to_string(),
         }
@@ -19,3 +19,16 @@ impl MessageError {
 }
 
 impl std::error::Error for MessageError {}
+
+pub trait OrMessageError<T> {
+    fn or_error(self, message: &str) -> Result<T, MessageError>;
+}
+
+impl<T> OrMessageError<T> for Option<T> {
+    fn or_error(self, message: &str) -> Result<T, MessageError> {
+        match self {
+            Some(data) => Ok(data),
+            _ => Err(MessageError::new(message).into()),
+        }
+    }
+}

@@ -1,4 +1,4 @@
-use crate::utils::MessageError;
+use crate::utils::{MessageError, OrMessageError};
 use actix_web::HttpRequest;
 use jsonwebtoken::{decode, decode_header, Algorithm::RS256, DecodingKey, Validation};
 use juniper::GraphQLObject;
@@ -57,22 +57,22 @@ pub async fn get_user(req: &HttpRequest) -> anyhow::Result<User> {
     let token = req
         .headers()
         .get("Authorization")
-        .ok_or(MessageError::new("Authorization header not found"))?
+        .or_error("Authorization header not found")?
         .to_str()?
         .strip_prefix("Bearer ")
-        .ok_or(MessageError::new("Authorization header is illegal"))?
+        .or_error("Authorization header is illegal")?
         .to_string();
     let header = decode_header(&token)?;
     if header.alg != RS256 {
         return Err(MessageError::new("alg mismatch").into());
     }
-    let kid = header.kid.ok_or(MessageError::new("message"))?;
+    let kid = header.kid.or_error("message")?;
     let now = chrono::Utc::now().timestamp();
 
     let mut resolver = certs::CERTS_RESOLVER
         .lock()
         .ok()
-        .ok_or(MessageError::new("failed obtain mutex"))?;
+        .or_error("failed obtain mutex")?;
     let pem = resolver.get(&kid, now).await?;
     let key = DecodingKey::from_rsa_pem(pem.as_slice())?;
 
