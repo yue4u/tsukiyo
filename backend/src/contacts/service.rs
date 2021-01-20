@@ -3,30 +3,15 @@ use crate::sql::{
     db::Conn,
     schema::contacts::{self, dsl::*},
 };
-use crate::utils::MessageError;
 use diesel::prelude::*;
+use validator::Validate;
 
 pub fn get(conn: Conn, contact_id: i32) -> anyhow::Result<Contact> {
     Ok(contacts.filter(id.eq(contact_id)).get_result(&conn)?)
 }
 
 pub fn create(conn: Conn, contact: ContactInput) -> anyhow::Result<Contact> {
-    if contact.title.is_empty() {
-        return Err(MessageError::new("contact title should not be empty").into());
-    }
-
-    if contact.name.is_empty() {
-        return Err(MessageError::new("contact name should not be empty").into());
-    }
-
-    if contact.email.is_empty() {
-        return Err(MessageError::new("contact email should not be empty").into());
-    }
-
-    if contact.body.is_empty() {
-        return Err(MessageError::new("contact body should not be empty").into());
-    }
-
+    contact.validate()?;
     Ok(diesel::insert_into(contacts::table)
         .values(&contact)
         .get_result::<Contact>(&conn)?)

@@ -1,25 +1,17 @@
 use super::model::*;
-use crate::{
-    sql::{
-        db::Conn,
-        schema::events::{self, dsl::*},
-    },
-    utils::MessageError,
+use crate::sql::{
+    db::Conn,
+    schema::events::{self, dsl::*},
 };
 use diesel::prelude::*;
+use validator::Validate;
 
 pub fn get(conn: Conn, event_id: i32) -> anyhow::Result<Event> {
     Ok(events.filter(id.eq(event_id)).get_result(&conn)?)
 }
 
 pub fn create(conn: Conn, event: EventInput) -> anyhow::Result<Event> {
-    if event.title.is_empty() {
-        return Err(MessageError::new("event title should not be empty").into());
-    }
-    if event.body.is_empty() {
-        return Err(MessageError::new("event body should not be empty").into());
-    }
-
+    event.validate()?;
     Ok(diesel::insert_into(events::table)
         .values(&event)
         .get_result::<Event>(&conn)?)

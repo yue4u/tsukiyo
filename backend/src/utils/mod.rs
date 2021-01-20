@@ -1,4 +1,5 @@
 use std::fmt;
+use validator::ValidationError;
 #[derive(Debug)]
 pub struct MessageError {
     message: String,
@@ -31,4 +32,11 @@ impl<T> OrMessageError<T> for Option<T> {
             _ => Err(MessageError::new(message).into()),
         }
     }
+}
+
+pub fn is_not_empty(input: &str) -> Result<(), ValidationError> {
+    if input.is_empty() {
+        return Err(ValidationError::new("should not be empty"));
+    }
+    Ok(())
 }

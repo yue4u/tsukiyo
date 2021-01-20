@@ -1,8 +1,10 @@
 use crate::sql::schema::events;
+use crate::utils::is_not_empty;
 use chrono::prelude::NaiveDateTime;
 use juniper::{GraphQLInputObject, GraphQLObject};
 use serde::{Deserialize, Serialize};
 use std::default::Default;
+use validator::Validate;
 
 #[derive(Queryable, Serialize, Deserialize, GraphQLObject)]
 #[graphql(description = "An bar event")]
@@ -26,12 +28,14 @@ pub struct Event {
     pub memo: Option<String>,
 }
 
-#[derive(Debug, Default, Insertable, Serialize, Deserialize, GraphQLInputObject)]
+#[derive(Debug, Default, Validate, Insertable, Serialize, Deserialize, GraphQLInputObject)]
 #[graphql(description = "An event input")]
 #[table_name = "events"]
 pub struct EventInput {
     pub slug: Option<String>,
+    #[validate(custom = "is_not_empty")]
     pub title: String,
+    #[validate(custom = "is_not_empty")]
     pub body: String,
     pub genre: Option<String>,
     pub tag: Option<String>,
