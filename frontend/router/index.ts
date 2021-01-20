@@ -16,9 +16,15 @@ const routes: Array<RouteRecordRaw> = [
   },
   {
     path: "/admin/event-editor",
-    name: "About",
+    name: "EventEditor",
     component: () =>
       import(/* webpackChunkName: "EventEditor" */ "@/admin/EventEditor.vue"),
+  },
+  {
+    path: "/admin/event-list",
+    name: "EventList",
+    component: () =>
+      import(/* webpackChunkName: "EventEditor" */ "@/admin/EventList.vue"),
   },
 ];
 

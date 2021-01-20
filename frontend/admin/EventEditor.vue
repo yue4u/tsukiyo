@@ -63,18 +63,19 @@ const state = reactive({
 });
 
 const submit = async () => {
+  // TODO: fix this
   const { data, error } = await createEvent({
-    slug: slug.value,
-    title: title.value,
-    body: body.value,
-    genre: genre.value,
-    tag: tag.value,
-    fee: fee.value,
-    ogpImg: ogpImg.value,
+    slug: slug.value || undefined,
+    title: title.value || undefined,
+    body: body.value || undefined,
+    genre: genre.value || undefined,
+    tag: tag.value || undefined,
+    fee: fee.value || undefined,
+    ogpImg: ogpImg.value || undefined,
     startTime: +new Date(startTime.value),
     endTime: +new Date(endTime.value),
     published: published.value,
-    memo: memo.value,
+    memo: memo.value || undefined,
   });
   state.data = data;
   state.error = error?.message;
