@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 import Home from "../open/Home.vue";
+import Order from "../open/Order.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -15,9 +16,15 @@ const routes: Array<RouteRecordRaw> = [
   },
   {
     path: "/admin/event-editor",
-    name: "About",
+    name: "EventEditor",
     component: () =>
       import(/* webpackChunkName: "EventEditor" */ "@/admin/EventEditor.vue"),
+  },
+  {
+    path: "/admin/event-list",
+    name: "EventList",
+    component: () =>
+      import(/* webpackChunkName: "EventEditor" */ "@/admin/EventList.vue"),
   },
 ];
 

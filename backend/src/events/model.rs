@@ -63,6 +63,7 @@ pub struct EventInput {
     pub fee: Option<i32>,
     #[validate(custom = "not_empty")]
     pub ogp_img: Option<String>,
+    pub start_time: Option<NaiveDateTime>,
     pub end_time: Option<NaiveDateTime>,
     pub creator_id: Option<i32>,
     pub published: Option<bool>,
