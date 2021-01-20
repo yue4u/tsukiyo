@@ -1,6 +1,5 @@
 use actix_web::{web, HttpRequest, HttpResponse, Responder};
-use juniper::http::graphiql::graphiql_source;
-use juniper::http::GraphQLRequest;
+use juniper::http::{graphiql::graphiql_source, GraphQLRequest};
 
 use super::schema::{create_schema, Schema};
 use crate::Context;
@@ -16,7 +15,16 @@ pub(crate) async fn graphql(
         pool: pool.get_ref().to_owned(),
         user: auth::get_user(&req).await.ok(),
     };
-    let res = data.execute(&schema, &ctx).await;
+    #[cfg(debug_assertions)]
+    let res = data.execute(&schema.admin, &ctx).await;
+
+    #[cfg(not(debug_assertions))]
+    let res = if ctx.user.is_some() {
+        data.execute(&schema.admin, &ctx).await
+    } else {
+        data.execute(&schema.public, &ctx).await
+    };
+
     serde_json::to_string(&res).expect("failed to get data")
 }
 

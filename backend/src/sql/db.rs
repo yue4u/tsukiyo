@@ -4,7 +4,7 @@ use dotenv::dotenv;
 use std::env;
 
 pub type Pool = r2d2::Pool<ConnectionManager<PgConnection>>;
-pub type Conn = r2d2::PooledConnection<ConnectionManager<PgConnection>>;
+// pub type Conn = r2d2::PooledConnection<ConnectionManager<PgConnection>>;
 
 pub fn create_pool() -> Pool {
     dotenv().ok();

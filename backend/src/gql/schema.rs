@@ -1,65 +1,128 @@
-use crate::events::{
-    self,
-    model::{Event, EventInput, EventQuery, EventUpdate},
+use crate::{
+    auth::User,
+    contacts::{self, Contact, ContactInput, ContactQuery, ContactUpdate},
+    events::{self, Event, EventInput, EventQuery, EventUpdate},
+    Context,
 };
-use crate::{auth::User, Context};
-use juniper::FieldResult;
-use juniper::{graphql_object, EmptySubscription};
+use events::EventPublic;
+use juniper::{graphql_object, EmptySubscription, FieldResult, RootNode};
 
-pub(crate) struct Query;
+impl juniper::Context for Context {}
+
+const API_VERSION: &str = "0.1";
+
+pub struct QueryAdmin;
 
 #[graphql_object(
     context = Context,
 )]
-impl Query {
+impl QueryAdmin {
     fn api_version() -> &str {
-        "0.1"
+        API_VERSION
     }
 
-    fn me(context: &Context) -> FieldResult<Option<User>> {
-        Ok(context.user.clone())
+    fn me(ctx: &Context) -> FieldResult<Option<User>> {
+        Ok(ctx.user.clone())
     }
 
-    fn event(context: &Context, id: i32) -> FieldResult<Event> {
-        let conn = context.pool.get()?;
-        let event = events::service::get(conn, id)?;
+    fn event(ctx: &Context, id: i32) -> FieldResult<Event> {
+        let event = events::service::get(ctx, id)?;
         Ok(event)
     }
 
-    fn events(context: &Context, by: Option<EventQuery>) -> FieldResult<Vec<Event>> {
-        let conn = context.pool.get()?;
-        let events = events::service::list(conn, by)?;
+    fn events(ctx: &Context, by: Option<EventQuery>) -> FieldResult<Vec<Event>> {
+        let events = events::service::list(ctx, by)?;
+        Ok(events)
+    }
+
+    fn contact(ctx: &Context, id: i32) -> FieldResult<Contact> {
+        let contact = contacts::service::get(ctx, id)?;
+        Ok(contact)
+    }
+
+    fn contacts(ctx: &Context, by: Option<ContactQuery>) -> FieldResult<Vec<Contact>> {
+        let contacts = contacts::service::list(ctx, by)?;
+        Ok(contacts)
+    }
+}
+
+pub struct MutationAdmin;
+
+#[graphql_object(
+    context = Context,
+)]
+impl MutationAdmin {
+    fn create_event(ctx: &Context, event: EventInput) -> FieldResult<Event> {
+        let event = events::create(ctx, event)?;
+        Ok(event)
+    }
+
+    fn update_event(ctx: &Context, id: i32, update: EventUpdate) -> FieldResult<Event> {
+        let event = events::update(ctx, id, update)?;
+        Ok(event)
+    }
+
+    fn delete_event(ctx: &Context, id: i32) -> FieldResult<Event> {
+        let event = events::delete(ctx, id)?;
+        Ok(event)
+    }
+
+    fn update_contact(ctx: &Context, id: i32, update: ContactUpdate) -> FieldResult<Contact> {
+        let contact = contacts::update(ctx, id, update)?;
+        Ok(contact)
+    }
+
+    fn delete_contact(ctx: &Context, id: i32) -> FieldResult<Contact> {
+        let contact = contacts::delete(ctx, id)?;
+        Ok(contact)
+    }
+}
+
+pub type SchemaAdmin = RootNode<'static, QueryAdmin, MutationAdmin, EmptySubscription<Context>>;
+
+pub struct QueryPublic;
+
+#[graphql_object(
+    context = Context,
+)]
+impl QueryPublic {
+    fn api_version() -> &str {
+        API_VERSION
+    }
+
+    fn event(ctx: &Context, id: i32) -> FieldResult<EventPublic> {
+        let event = events::service::get_public(ctx, id)?;
+        Ok(event)
+    }
+
+    fn events(ctx: &Context, by: Option<EventQuery>) -> FieldResult<Vec<EventPublic>> {
+        let events = events::service::list_public(ctx, by)?;
         Ok(events)
     }
 }
 
-pub(crate) struct Mutation;
+pub struct MutationPublic;
 
 #[graphql_object(
     context = Context,
 )]
-impl Mutation {
-    fn create_event(context: &Context, event: EventInput) -> FieldResult<Event> {
-        let conn = context.pool.get()?;
-        let event = events::service::create(conn, event)?;
-        Ok(event)
-    }
-
-    fn update_event(context: &Context, id: i32, update: EventUpdate) -> FieldResult<Event> {
-        let conn = context.pool.get()?;
-        let event = events::service::update(conn, id, update)?;
-        Ok(event)
-    }
-
-    fn delete_event(context: &Context, id: i32) -> FieldResult<Event> {
-        let conn = context.pool.get()?;
-        let event = events::service::delete(conn, id).expect("failed to delete event");
-        Ok(event)
+impl MutationPublic {
+    fn create_contact(ctx: &Context, contact: ContactInput) -> FieldResult<Contact> {
+        let contact = contacts::create(ctx, contact)?;
+        Ok(contact)
     }
 }
 
-pub(crate) type Schema = juniper::RootNode<'static, Query, Mutation, EmptySubscription<Context>>;
+pub type SchemaPublic = RootNode<'static, QueryPublic, MutationPublic, EmptySubscription<Context>>;
 
-pub(crate) fn create_schema() -> Schema {
-    Schema::new(Query, Mutation, EmptySubscription::new())
+pub struct Schema {
+    pub admin: SchemaAdmin,
+    pub public: SchemaPublic,
+}
+
+pub fn create_schema() -> Schema {
+    Schema {
+        admin: SchemaAdmin::new(QueryAdmin, MutationAdmin, EmptySubscription::new()),
+        public: SchemaPublic::new(QueryPublic, MutationPublic, EmptySubscription::new()),
+    }
 }

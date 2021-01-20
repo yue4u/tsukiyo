@@ -67,6 +67,12 @@ diesel setup
 diesel migration run
 ```
 
+to redo migration:
+
+```sh
+diesel migration redo
+```
+
 ## api endpoints
 
 | path      |                    |

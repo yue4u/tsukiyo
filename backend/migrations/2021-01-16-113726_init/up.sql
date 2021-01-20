@@ -2,7 +2,7 @@
 CREATE TABLE IF NOT EXISTS admins (
   id serial PRIMARY KEY,
   name VARCHAR ( 50 ) UNIQUE NOT NULL,
-  password VARCHAR NOT NULL, 	   -- hashed password
+  uid VARCHAR NOT NULL, 	                       -- uid from id platform
   created_at TIMESTAMP NOT NULL DEFAULT NOW(),
   last_login TIMESTAMP
 );
@@ -22,14 +22,14 @@ CREATE TABLE IF NOT EXISTS events (
   ogp_img VARCHAR,                               -- アイキャッチ画像
   start_time TIMESTAMP,                          -- イベント開始日時
   end_time TIMESTAMP,                            -- イベント終了日時
-  publish_time TIMESTAMP,                        -- 公開開始日時
-  page_view INTEGER,                             -- PV
+  publish_at TIMESTAMP,                          -- 公開開始日時
+  updated_at TIMESTAMP,                          -- 更新日時
+  page_view INTEGER NOT NULL DEFAULT 0,          -- PV
 
   -- 管理用に欲しいもの
 
   creator_id INTEGER REFERENCES admins,          -- 作成者
   created_at TIMESTAMP NOT NULL DEFAULT NOW(),   -- 作成日時
-  updated_at TIMESTAMP,                          -- 更新日時
   published BOOLEAN NOT NULL DEFAULT 'f',        -- 公開フラグ
   memo VARCHAR                                   -- メモ
 );
@@ -48,7 +48,7 @@ CREATE TABLE IF NOT EXISTS contacts (
 
   -- 管理用に欲しいもの
 
-  created_at TIMESTAMP DEFAULT NOW(),            -- 作成日時
+  created_at TIMESTAMP NOT NULL DEFAULT NOW(),   -- 作成日時
   checked BOOLEAN NOT NULL DEFAULT 'f'           -- 確認済フラグ
 );
 

@@ -35,6 +35,8 @@ services:
       - ./backend:/app
       - cargo-cache:/usr/local/cargo/registry
       - target-cache:/app/target
+    env_file:
+      - ./backend/.env
     environment:
       DATABASE_URL: "postgresql://tsukiyo:qtJqYM7bFfjtrew@db/development"
     command: /bin/sh -c "cargo watch -x run"
@@ -52,18 +54,6 @@ services:
       POSTGRES_PASSWORD: qtJqYM7bFfjtrew
       POSTGRES_INITDB_ARGS: --encoding=UTF-8
       POSTGRES_DB: development
-
-  redis:
-    container_name: tsukiyo_redis
-    restart: always
-    image: redis:latest
-    ports:
-      - "6379:6379"
-    expose:
-      - "6379"
-    command: redis-server --appendonly yes
-    volumes:
-      - ./docker/redis:/data'
 
 volumes:
   db_data:
