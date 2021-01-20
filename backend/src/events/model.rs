@@ -1,5 +1,5 @@
 use crate::sql::schema::events;
-use crate::utils::is_not_empty;
+use crate::utils::not_empty;
 use chrono::prelude::NaiveDateTime;
 use juniper::{GraphQLInputObject, GraphQLObject};
 use serde::{Deserialize, Serialize};
@@ -50,32 +50,43 @@ pub struct EventPublic {
 #[graphql(description = "Event input for creating event")]
 #[table_name = "events"]
 pub struct EventInput {
+    #[validate(custom = "not_empty")]
     pub slug: Option<String>,
-    #[validate(custom = "is_not_empty")]
+    #[validate(custom = "not_empty")]
     pub title: String,
-    #[validate(custom = "is_not_empty")]
+    #[validate(custom = "not_empty")]
     pub body: String,
+    #[validate(custom = "not_empty")]
     pub genre: Option<String>,
+    #[validate(custom = "not_empty")]
     pub tag: Option<String>,
     pub fee: Option<i32>,
+    #[validate(custom = "not_empty")]
     pub ogp_img: Option<String>,
-    pub start_time: Option<NaiveDateTime>,
     pub end_time: Option<NaiveDateTime>,
-    pub page_view: i32,
     pub creator_id: Option<i32>,
     pub published: Option<bool>,
+    #[validate(custom = "not_empty")]
     pub memo: Option<String>,
 }
 
-#[derive(Debug, Default, Insertable, AsChangeset, Serialize, Deserialize, GraphQLInputObject)]
+#[derive(
+    Debug, Default, Validate, Insertable, AsChangeset, Serialize, Deserialize, GraphQLInputObject,
+)]
 #[table_name = "events"]
 pub struct EventUpdate {
+    #[validate(custom = "not_empty")]
     pub slug: Option<String>,
+    #[validate(custom = "not_empty")]
     pub title: Option<String>,
+    #[validate(custom = "not_empty")]
     pub body: Option<String>,
+    #[validate(custom = "not_empty")]
     pub genre: Option<String>,
+    #[validate(custom = "not_empty")]
     pub tag: Option<String>,
     pub fee: Option<i32>,
+    #[validate(custom = "not_empty")]
     pub ogp_img: Option<String>,
     pub start_time: Option<NaiveDateTime>,
     pub end_time: Option<NaiveDateTime>,
@@ -84,6 +95,7 @@ pub struct EventUpdate {
     pub page_view: i32,
     pub creator_id: Option<i32>,
     pub published: Option<bool>,
+    #[validate(custom = "not_empty")]
     pub memo: Option<String>,
 }
 

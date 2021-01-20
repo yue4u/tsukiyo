@@ -1,5 +1,5 @@
 use crate::sql::schema::contacts;
-use crate::utils::is_not_empty;
+use crate::utils::not_empty;
 use chrono::prelude::NaiveDateTime;
 use juniper::{GraphQLInputObject, GraphQLObject};
 use serde::{Deserialize, Serialize};
@@ -23,21 +23,21 @@ pub struct Contact {
 #[graphql(description = "A new contact input")]
 #[table_name = "contacts"]
 pub struct ContactInput {
-    #[validate(length(max = 100), custom = "is_not_empty")]
+    #[validate(length(max = 100), custom = "not_empty")]
     pub title: String,
-    #[validate(length(max = 50), custom = "is_not_empty")]
+    #[validate(length(max = 50), custom = "not_empty")]
     pub name: String,
     #[validate(email)]
     pub email: String,
     pub phone: Option<String>,
-    #[validate(custom = "is_not_empty")]
+    #[validate(custom = "not_empty")]
     pub body: String,
 }
 
 #[derive(Debug, Default, Insertable, AsChangeset, Serialize, Deserialize, GraphQLInputObject)]
 #[table_name = "contacts"]
 pub struct ContactUpdate {
-    checked: Option<bool>,
+    checked: bool,
 }
 
 #[derive(Debug, Default, Serialize, Deserialize, GraphQLInputObject)]

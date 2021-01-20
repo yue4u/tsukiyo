@@ -22,14 +22,15 @@ pub fn get_public(ctx: &Context, event_id: i32) -> anyhow::Result<EventPublic> {
 }
 
 pub fn create(ctx: &Context, event: EventInput) -> anyhow::Result<Event> {
-    let conn = ctx.pool.get()?;
     event.validate()?;
+    let conn = ctx.pool.get()?;
     Ok(diesel::insert_into(events::table)
         .values(&event)
         .get_result::<Event>(&conn)?)
 }
 
 pub fn update(ctx: &Context, event_id: i32, event: EventUpdate) -> anyhow::Result<Event> {
+    event.validate()?;
     let conn = ctx.pool.get()?;
     Ok(diesel::update(events.filter(id.eq(event_id)))
         .set(&event)

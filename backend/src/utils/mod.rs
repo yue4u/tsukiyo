@@ -34,7 +34,7 @@ impl<T> OrMessageError<T> for Option<T> {
     }
 }
 
-pub fn is_not_empty(input: &str) -> Result<(), ValidationError> {
+pub fn not_empty(input: &str) -> Result<(), ValidationError> {
     if input.is_empty() {
         return Err(ValidationError::new("should not be empty"));
     }
