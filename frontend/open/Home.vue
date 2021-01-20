@@ -5,7 +5,7 @@
 <script setup lang="ts">
 // this is caused by <script setup>, looks vetur does not support it for now
 // @ts-ignore
-import EventList from "@/components/EventList.vue";
+// import EventList from "@/components/EventList.vue";
 // @ts-ignore
 import Main from "@/components/design/Main.vue";
 </script>
