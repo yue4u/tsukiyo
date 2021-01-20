@@ -35,8 +35,9 @@ pub async fn graphiql() -> HttpResponse {
 }
 
 pub fn register(config: &mut web::ServiceConfig) {
-    config
+    let config = config
         .data(create_schema())
-        .route("/graphql", web::post().to(graphql))
-        .route("/graphiql", web::get().to(graphiql));
+        .route("/graphql", web::post().to(graphql));
+    #[cfg(debug_assertions)]
+    config.route("/graphiql", web::get().to(graphiql));
 }

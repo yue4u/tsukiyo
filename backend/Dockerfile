@@ -20,11 +20,15 @@ RUN apt-get update \
 COPY . .
 
 # build
-FROM develop as build
+# see https://github.com/emk/rust-musl-builder/tree/master/examples/using-diesel
+FROM ekidd/rust-musl-builder:latest AS builder
+ADD --chown=rust:rust . ./
 RUN cargo build --release
 
 # production
-FROM rust
-COPY --from=build /app/target/release/api .
-EXPOSE 4000
-CMD ["/usr/local/bin/api"]
+FROM alpine:latest
+RUN apk --no-cache add ca-certificates
+COPY --from=builder \
+    /home/rust/src/target/x86_64-unknown-linux-musl/release/backend \
+    /usr/local/bin/
+CMD /usr/local/bin/backend
