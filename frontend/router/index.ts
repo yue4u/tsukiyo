@@ -9,11 +9,6 @@ const routes: Array<RouteRecordRaw> = [
     component: Home,
   },
   {
-    path: "/order",
-    name: "Order",
-    component: Order,
-  },
-  {
     path: "/admin/login",
     name: "Login",
     component: () =>
