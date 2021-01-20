@@ -29,6 +29,6 @@ const menu = [
   { text: "イベント一覧", link: "#" },
   { text: "メニュー", link: "#" },
   { text: "アクセス", link: "#" },
-  { text: "問合せ", link: "#" },
+  { text: "お問い合わせ", link: "#" },
 ];
 </script>
