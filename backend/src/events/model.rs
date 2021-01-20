@@ -7,7 +7,7 @@ use std::default::Default;
 use validator::Validate;
 
 #[derive(Queryable, Serialize, Deserialize, GraphQLObject)]
-#[graphql(description = "An bar event")]
+#[graphql(description = "Event data including admin info")]
 pub struct Event {
     pub id: i32,
     pub slug: Option<String>,
@@ -19,17 +19,35 @@ pub struct Event {
     pub ogp_img: Option<String>,
     pub start_time: Option<NaiveDateTime>,
     pub end_time: Option<NaiveDateTime>,
-    pub publish_time: Option<NaiveDateTime>,
-    pub page_view: Option<i32>,
+    pub publish_at: Option<NaiveDateTime>,
+    pub updated_at: Option<NaiveDateTime>,
+    pub page_view: i32,
     pub creator_id: Option<i32>,
     pub created_at: NaiveDateTime,
-    pub updated_at: Option<NaiveDateTime>,
     pub published: bool,
     pub memo: Option<String>,
 }
 
+#[derive(Queryable, Serialize, Deserialize, GraphQLObject)]
+#[graphql(description = "Event data which is ok to be public")]
+pub struct EventPublic {
+    pub id: i32,
+    pub slug: Option<String>,
+    pub title: String,
+    pub body: String,
+    pub genre: Option<String>,
+    pub tag: Option<String>,
+    pub fee: Option<i32>,
+    pub ogp_img: Option<String>,
+    pub start_time: Option<NaiveDateTime>,
+    pub end_time: Option<NaiveDateTime>,
+    pub publish_at: Option<NaiveDateTime>,
+    pub updated_at: Option<NaiveDateTime>,
+    pub page_view: i32,
+}
+
 #[derive(Debug, Default, Validate, Insertable, Serialize, Deserialize, GraphQLInputObject)]
-#[graphql(description = "An event input")]
+#[graphql(description = "Event input for creating event")]
 #[table_name = "events"]
 pub struct EventInput {
     pub slug: Option<String>,
@@ -43,7 +61,7 @@ pub struct EventInput {
     pub ogp_img: Option<String>,
     pub start_time: Option<NaiveDateTime>,
     pub end_time: Option<NaiveDateTime>,
-    pub page_view: Option<i32>,
+    pub page_view: i32,
     pub creator_id: Option<i32>,
     pub published: Option<bool>,
     pub memo: Option<String>,
@@ -61,10 +79,10 @@ pub struct EventUpdate {
     pub ogp_img: Option<String>,
     pub start_time: Option<NaiveDateTime>,
     pub end_time: Option<NaiveDateTime>,
-    pub publish_time: Option<NaiveDateTime>,
-    pub page_view: Option<i32>,
-    pub creator_id: Option<i32>,
+    pub publish_at: Option<NaiveDateTime>,
     pub updated_at: Option<NaiveDateTime>,
+    pub page_view: i32,
+    pub creator_id: Option<i32>,
     pub published: Option<bool>,
     pub memo: Option<String>,
 }

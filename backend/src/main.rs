@@ -9,8 +9,7 @@ mod utils;
 extern crate diesel;
 use actix_cors::Cors;
 use actix_web::{http::header, middleware::Logger, App, HttpServer};
-
-pub(crate) struct Context {
+pub struct Context {
     pool: sql::db::Pool,
     user: Option<auth::User>,
 }

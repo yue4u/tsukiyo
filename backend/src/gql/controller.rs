@@ -15,7 +15,11 @@ pub(crate) async fn graphql(
         pool: pool.get_ref().to_owned(),
         user: auth::get_user(&req).await.ok(),
     };
-    let res = data.execute(&schema, &ctx).await;
+    let res = if ctx.user.is_some() {
+        data.execute(&schema.admin, &ctx).await
+    } else {
+        data.execute(&schema.public, &ctx).await
+    };
     serde_json::to_string(&res).expect("failed to get data")
 }
 
