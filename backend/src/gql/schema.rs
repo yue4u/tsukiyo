@@ -1,8 +1,9 @@
-use crate::events::{
-    self,
-    model::{Event, EventInput, EventQuery, EventUpdate},
+use crate::{
+    auth::User,
+    contacts::{self, Contact, ContactInput, ContactQuery, ContactUpdate},
+    events::{self, Event, EventInput, EventQuery, EventUpdate},
+    Context,
 };
-use crate::{auth::User, Context};
 use juniper::{graphql_object, EmptySubscription, FieldResult};
 
 impl juniper::Context for Context {}
@@ -32,6 +33,18 @@ impl Query {
         let events = events::service::list(conn, by)?;
         Ok(events)
     }
+
+    fn contact(context: &Context, id: i32) -> FieldResult<Contact> {
+        let conn = context.pool.get()?;
+        let contact = contacts::service::get(conn, id)?;
+        Ok(contact)
+    }
+
+    fn contacts(context: &Context, by: Option<ContactQuery>) -> FieldResult<Vec<Contact>> {
+        let conn = context.pool.get()?;
+        let contacts = contacts::service::list(conn, by)?;
+        Ok(contacts)
+    }
 }
 
 pub(crate) struct Mutation;
@@ -42,20 +55,38 @@ pub(crate) struct Mutation;
 impl Mutation {
     fn create_event(context: &Context, event: EventInput) -> FieldResult<Event> {
         let conn = context.pool.get()?;
-        let event = events::service::create(conn, event)?;
+        let event = events::create(conn, event)?;
         Ok(event)
     }
 
     fn update_event(context: &Context, id: i32, update: EventUpdate) -> FieldResult<Event> {
         let conn = context.pool.get()?;
-        let event = events::service::update(conn, id, update)?;
+        let event = events::update(conn, id, update)?;
         Ok(event)
     }
 
     fn delete_event(context: &Context, id: i32) -> FieldResult<Event> {
         let conn = context.pool.get()?;
-        let event = events::service::delete(conn, id).expect("failed to delete event");
+        let event = events::delete(conn, id)?;
         Ok(event)
+    }
+
+    fn create_contact(context: &Context, contact: ContactInput) -> FieldResult<Contact> {
+        let conn = context.pool.get()?;
+        let contact = contacts::create(conn, contact)?;
+        Ok(contact)
+    }
+
+    fn update_contact(context: &Context, id: i32, update: ContactUpdate) -> FieldResult<Contact> {
+        let conn = context.pool.get()?;
+        let contact = contacts::update(conn, id, update)?;
+        Ok(contact)
+    }
+
+    fn delete_contact(context: &Context, id: i32) -> FieldResult<Contact> {
+        let conn = context.pool.get()?;
+        let contact = contacts::delete(conn, id)?;
+        Ok(contact)
     }
 }
 

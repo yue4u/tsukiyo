@@ -1,45 +1,41 @@
 use super::model::*;
-use crate::sql::{
-    db::Conn,
-    schema::events::{self, dsl::*},
+use crate::{
+    sql::{
+        db::Conn,
+        schema::events::{self, dsl::*},
+    },
+    utils::MessageError,
 };
 use diesel::prelude::*;
 
-pub fn get(conn: Conn, event_id: i32) -> Result<Event, String> {
-    Ok(events
-        .filter(id.eq(event_id))
-        .get_result(&conn)
-        .expect("failed to get query create"))
+pub fn get(conn: Conn, event_id: i32) -> anyhow::Result<Event> {
+    Ok(events.filter(id.eq(event_id)).get_result(&conn)?)
 }
 
-pub fn create(conn: Conn, event: EventInput) -> Result<Event, String> {
+pub fn create(conn: Conn, event: EventInput) -> anyhow::Result<Event> {
     if event.title.is_empty() {
-        return Err("event title should not be empty".to_owned());
+        return Err(MessageError::new("event title should not be empty").into());
     }
     if event.body.is_empty() {
-        return Err("event body should not be empty".to_owned());
+        return Err(MessageError::new("event body should not be empty").into());
     }
 
     Ok(diesel::insert_into(events::table)
         .values(&event)
-        .get_result::<Event>(&conn)
-        .expect("failed to execute query create"))
+        .get_result::<Event>(&conn)?)
 }
 
-pub fn update(conn: Conn, event_id: i32, event: EventUpdate) -> Result<Event, String> {
+pub fn update(conn: Conn, event_id: i32, event: EventUpdate) -> anyhow::Result<Event> {
     Ok(diesel::update(events.filter(id.eq(event_id)))
         .set(&event)
-        .get_result(&conn)
-        .expect("failed to execute query update"))
+        .get_result(&conn)?)
 }
 
-pub fn delete(conn: Conn, event_id: i32) -> Result<Event, String> {
-    Ok(diesel::delete(events.filter(id.eq(event_id)))
-        .get_result(&conn)
-        .expect("failed to execute query delete"))
+pub fn delete(conn: Conn, event_id: i32) -> anyhow::Result<Event> {
+    Ok(diesel::delete(events.filter(id.eq(event_id))).get_result(&conn)?)
 }
 
-pub fn list(conn: Conn, by: Option<EventQuery>) -> Result<Vec<Event>, String> {
+pub fn list(conn: Conn, by: Option<EventQuery>) -> anyhow::Result<Vec<Event>> {
     let mut query = events::table.into_boxed();
     if let Some(by_event) = by {
         // TODO: simplify this
@@ -56,7 +52,5 @@ pub fn list(conn: Conn, by: Option<EventQuery>) -> Result<Vec<Event>, String> {
             query = query.limit(_limit as i64);
         }
     }
-    Ok(query
-        .load::<Event>(&conn)
-        .expect("failed to execute query delete"))
+    Ok(query.load::<Event>(&conn)?)
 }

@@ -1,4 +1,5 @@
 mod auth;
+mod contacts;
 mod events;
 mod gql;
 mod sql;

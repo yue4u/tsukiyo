@@ -2,7 +2,7 @@
 CREATE TABLE IF NOT EXISTS admins (
   id serial PRIMARY KEY,
   name VARCHAR ( 50 ) UNIQUE NOT NULL,
-  password VARCHAR NOT NULL, 	   -- hashed password
+  uid VARCHAR NOT NULL, 	                       -- uid from id platform
   created_at TIMESTAMP NOT NULL DEFAULT NOW(),
   last_login TIMESTAMP
 );
@@ -48,7 +48,7 @@ CREATE TABLE IF NOT EXISTS contacts (
 
   -- 管理用に欲しいもの
 
-  created_at TIMESTAMP DEFAULT NOW(),            -- 作成日時
+  created_at TIMESTAMP NOT NULL DEFAULT NOW(),   -- 作成日時
   checked BOOLEAN NOT NULL DEFAULT 'f'           -- 確認済フラグ
 );
 

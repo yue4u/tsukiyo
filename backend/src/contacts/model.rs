@@ -1,0 +1,41 @@
+use crate::sql::schema::contacts;
+use chrono::prelude::NaiveDateTime;
+use juniper::{GraphQLInputObject, GraphQLObject};
+use serde::{Deserialize, Serialize};
+use std::default::Default;
+
+#[derive(Queryable, Serialize, Deserialize, GraphQLObject)]
+#[graphql(description = "A new contact")]
+pub struct Contact {
+    pub id: i32,
+    pub title: String,
+    pub name: String,
+    pub email: String,
+    pub phone: Option<String>,
+    pub body: String,
+    pub created_at: NaiveDateTime,
+    pub checked: bool,
+}
+
+#[derive(Debug, Default, Insertable, Serialize, Deserialize, GraphQLInputObject)]
+#[graphql(description = "A new contact input")]
+#[table_name = "contacts"]
+pub struct ContactInput {
+    pub title: String,
+    pub name: String,
+    pub email: String,
+    pub phone: Option<String>,
+    pub body: String,
+}
+
+#[derive(Debug, Default, Insertable, AsChangeset, Serialize, Deserialize, GraphQLInputObject)]
+#[table_name = "contacts"]
+pub struct ContactUpdate {
+    checked: Option<bool>,
+}
+
+#[derive(Debug, Default, Serialize, Deserialize, GraphQLInputObject)]
+pub struct ContactQuery {
+    pub search_string: Option<String>,
+    pub checked: Option<bool>,
+}
