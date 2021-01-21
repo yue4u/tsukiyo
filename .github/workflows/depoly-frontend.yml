@@ -1,4 +1,4 @@
-name: Deploy Cloud Run
+name: Deploy Frontend Cloud Storage
 
 on:
   push:

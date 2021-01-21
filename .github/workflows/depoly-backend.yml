@@ -1,4 +1,4 @@
-name: Deploy Cloud Run
+name: Deploy Backend Cloud Run
 
 on:
   push:
