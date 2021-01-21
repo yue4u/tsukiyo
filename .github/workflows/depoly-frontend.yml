@@ -55,6 +55,22 @@ jobs:
 
       - name: upload-files
         run: |
-          gsutil -m -d cp -a public-read -R dist/* ${{ env.BUCKET }}
+          gsutil --quiet -m -d cp -a public-read -R dist/* ${{ env.BUCKET }}
 
       # TODO: setup Cache-Control
+
+      - uses: 8398a7/action-slack@v3
+        with:
+          status: custom
+          fields: workflow,job,commit,repo,ref,author,took
+          custom_payload: |
+            {
+              username: 'depoly-frontend',
+              icon_emoji: ':vue:',
+              attachments: [{
+                color: '${{ job.status }}' === 'success' ? 'good' : '${{ job.status }}' === 'failure' ? 'danger' : 'warning',
+                text: `Deploy backend done in ${process.env.AS_TOOK} :vue:`,
+              }]
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}

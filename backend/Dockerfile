@@ -18,17 +18,3 @@ RUN apt-get update \
   && cargo install cargo-watch cargo-make diesel_cli \
   && cargo install diesel_cli --no-default-features --features postgres
 COPY . .
-
-# build
-# see https://github.com/emk/rust-musl-builder/tree/master/examples/using-diesel
-FROM ekidd/rust-musl-builder:latest AS builder
-ADD --chown=rust:rust . ./
-RUN cargo build --release
-
-# production
-FROM alpine:latest
-RUN apk --no-cache add ca-certificates
-COPY --from=builder \
-    /home/rust/src/target/x86_64-unknown-linux-musl/release/backend \
-    /usr/local/bin/
-CMD /usr/local/bin/backend
