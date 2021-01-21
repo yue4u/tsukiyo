@@ -11,7 +11,7 @@ env:
   SERVICE: ${{ secrets.GCP_SERVICE }}
   SA_KEY: ${{ secrets.GCP_SA_KEY }}
   REGION: asia-northeast1
-  IMAGE: asia.gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}
+  IMAGE: asia.gcr.io/${{ secrets.GCP_PROJECT }}/${{ secrets.GCP_SERVICE }}
 
 jobs:
   deploy-backend:
