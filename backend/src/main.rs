@@ -34,6 +34,7 @@ async fn main() -> std::io::Result<()> {
         #[cfg(not(debug_assertions))]
         let cors = Cors::default()
             .allowed_methods(vec!["GET", "POST"])
+            .allowed_origin(env::var("DEPLOY_WEB_URL"))
             .allowed_origin("http://localhost:3000")
             .allowed_headers(vec![header::AUTHORIZATION, header::ACCEPT])
             .allowed_header(header::CONTENT_TYPE)
