@@ -28,6 +28,7 @@ pub(crate) async fn graphql(
     serde_json::to_string(&res).expect("failed to get data")
 }
 
+#[cfg(debug_assertions)]
 pub async fn graphiql() -> HttpResponse {
     HttpResponse::Ok()
         .content_type("text/html; charset=utf-8")
