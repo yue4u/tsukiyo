@@ -11,6 +11,7 @@ env:
   SERVICE: ${{ secrets.GCP_SERVICE }}
   SA_KEY: ${{ secrets.GCP_SA_KEY }}
   REGION: asia-northeast1
+  IMAGE: asia.gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}
 
 jobs:
   deploy-backend:
@@ -29,20 +30,21 @@ jobs:
           service_account_key: ${{ env.SA_KEY }}
           export_default_credentials: true
 
-      - name: Authorize Docker push
+      - name: Authorize Docker
         run: gcloud auth configure-docker
 
       - name: Build and Push Container
         run: |
-          docker build -t asia.gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{  github.sha }} -f Dockerfile.prod .
-          docker push asia.gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{  github.sha }}
+          docker pull ${{ env.IMAGE }}-cache || true
+          docker build . -t ${{ env.IMAGE }}:${{  github.sha }} -f Dockerfile.prod --cache-from=${{ env.IMAGE }}-cache
+          docker push ${{ env.IMAGE }}:${{  github.sha }} || true
 
       - name: Deploy to Cloud Run
         id: deploy
         uses: google-github-actions/deploy-cloudrun@v0.2.0
         with:
           service: ${{ env.SERVICE }}
-          image: asia.gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{  github.sha }}
+          image: ${{ env.IMAGE }}:${{ github.sha }}
           region: ${{ env.REGION }}
 
       - uses: 8398a7/action-slack@v3
