@@ -35,7 +35,7 @@ jobs:
 
       - name: Build and Push Container
         run: |
-          docker build -t asia.gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{  github.sha }} -f Dockerfile.production .
+          docker build -t asia.gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{  github.sha }} -f Dockerfile.prod .
           docker push asia.gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{  github.sha }}
 
       - name: Deploy to Cloud Run

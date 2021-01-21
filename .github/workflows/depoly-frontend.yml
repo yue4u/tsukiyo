@@ -69,7 +69,7 @@ jobs:
               icon_emoji: ':vue:',
               attachments: [{
                 color: '${{ job.status }}' === 'success' ? 'good' : '${{ job.status }}' === 'failure' ? 'danger' : 'warning',
-                text: `Deploy backend done in ${process.env.AS_TOOK} :vue:`,
+                text: `Deploy frontend done in ${process.env.AS_TOOK} :vue:`,
               }]
             }
         env:
