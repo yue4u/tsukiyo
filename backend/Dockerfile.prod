@@ -1,5 +1,10 @@
 # see https://github.com/emk/rust-musl-builder/tree/master/examples/using-diesel
 FROM ekidd/rust-musl-builder:latest AS builder
+ADD --chown=rust:rust Cargo.toml Cargo.lock ./
+# compile dependencies
+RUN mkdir -p src \
+ && echo "fn main() {}" > src/main.rs \
+ && cargo build --release
 ADD --chown=rust:rust . ./
 RUN cargo build --release
 
