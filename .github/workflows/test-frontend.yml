@@ -1,6 +1,9 @@
 name: Test frontend
 
-on: [push]
+on:
+  push:
+    branches-ignore:
+      - master
 
 env:
   HUSKY: 0
