@@ -10,6 +10,7 @@ env:
   BUCKET: ${{ secrets.GCP_BUCKET }}
   SA_KEY: ${{ secrets.GCP_SA_KEY }}
   REGION: asia-northeast1
+  DEPLOY_WEB_URL: ${{ secrets.DEPLOY_WEB_URL }}
   VITE_API_KEY: ${{ secrets.VITE_API_KEY}}
   VITE_AUTH_DOMAIN: ${{ secrets.VITE_AUTH_DOMAIN}}
   VITE_API_ENDPOINT: ${{ secrets.VITE_API_ENDPOINT}}
@@ -69,7 +70,7 @@ jobs:
               icon_emoji: ':vue:',
               attachments: [{
                 color: '${{ job.status }}' === 'success' ? 'good' : '${{ job.status }}' === 'failure' ? 'danger' : 'warning',
-                text: `Deploy frontend done in ${process.env.AS_TOOK} :vue: \n ${{ secrets.DEPLOY_WEB_URL }}`,
+                text: `Deploy frontend done in ${process.env.AS_TOOK} :vue: \n ${{ env.DEPLOY_WEB_URL }}`,
               }]
             }
         env:

@@ -12,6 +12,7 @@ env:
   BUCKET: ${{ secrets.GCP_BUCKET }}
   SA_KEY: ${{ secrets.GCP_SA_KEY }}
   REGION: asia-northeast1
+  DEPLOY_WEB_URL: ${{ secrets.DEPLOY_WEB_URL }}
 
 jobs:
   deploy-backend:
