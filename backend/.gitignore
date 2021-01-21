@@ -1,5 +1,5 @@
 /target
 Cargo.lock
-*-config.json
+*.json
 .env
 migrations
