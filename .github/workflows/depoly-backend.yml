@@ -52,7 +52,7 @@ jobs:
           fields: workflow,job,commit,repo,ref,author,took
           custom_payload: |
             {
-              username: 'depoly-backend',
+              username: 'deploy-backend',
               icon_emoji: ':actix:',
               attachments: [{
                 color: '${{ job.status }}' === 'success' ? 'good' : '${{ job.status }}' === 'failure' ? 'danger' : 'warning',

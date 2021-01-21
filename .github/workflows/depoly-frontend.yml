@@ -65,11 +65,11 @@ jobs:
           fields: workflow,job,commit,repo,ref,author,took
           custom_payload: |
             {
-              username: 'depoly-frontend',
+              username: 'deploy-frontend',
               icon_emoji: ':vue:',
               attachments: [{
                 color: '${{ job.status }}' === 'success' ? 'good' : '${{ job.status }}' === 'failure' ? 'danger' : 'warning',
-                text: `Deploy frontend done in ${process.env.AS_TOOK} :vue:`,
+                text: `Deploy frontend done in ${process.env.AS_TOOK} :vue: \n ${{ secrets.DEPLOY_WEB_URL }}`,
               }]
             }
         env:
