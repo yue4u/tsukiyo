@@ -1,6 +1,9 @@
 name: Test backend
 
-on: [push]
+on:
+  push:
+    branches-ignore:
+      - master
 
 env:
   CARGO_TERM_COLOR: always

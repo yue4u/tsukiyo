@@ -1,0 +1,48 @@
+name: Deploy Cloud Run
+
+on:
+  push:
+    branches:
+      - master
+
+# adapted form https://github.com/google-github-actions/deploy-cloudrun/blob/main/.github/workflows/example-workflow.yaml
+name: Build and Deploy a Container
+env:
+  PROJECT_ID: ${{ secrets.GCP_PROJECT }}
+  SERVICE: ${{ secrets.GCP_SERVICE }}
+  BUCKET: ${{ secrets.GCP_BUCKET }}
+  SA_KEY: ${{ secrets.GCP_SA_KEY }}
+  REGION: asia-northeast1
+
+jobs:
+  deploy-backend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./backend
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Setup Cloud SDK
+      uses: google-github-actions/setup-gcloud@v0.2.0
+      with:
+        project_id: ${{ env.PROJECT_ID }}
+        service_account_key: ${{ env.SA_KEY }}
+        export_default_credentials: true
+
+    - name: Authorize Docker push
+      run: gcloud auth configure-docker
+
+    - name: Build and Push Container
+      run: |
+        docker build -t asia.gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{  github.sha }} .
+        docker push asia.gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{  github.sha }}
+
+    - name: Deploy to Cloud Run
+      id: deploy
+      uses: google-github-actions/deploy-cloudrun@v0.2.0
+      with:
+        service: ${{ env.SERVICE }}
+        image: asia.gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{  github.sha }}
+        region: ${{ env.REGION }}

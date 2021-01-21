@@ -1,0 +1,61 @@
+name: Deploy Cloud Run
+
+on:
+  push:
+    branches:
+      - master
+
+# adapted form https://github.com/google-github-actions/deploy-cloudrun/blob/main/.github/workflows/example-workflow.yaml
+name: Build and Deploy a Container
+env:
+  BUCKET: ${{ secrets.GCP_BUCKET }}
+  SA_KEY: ${{ secrets.GCP_SA_KEY }}
+  REGION: asia-northeast1
+  VITE_API_KEY: ${{ secrets.VITE_API_KEY}}
+  VITE_AUTH_DOMAIN: ${{ secrets.VITE_AUTH_DOMAIN}}
+  VITE_API_ENDPOINT: ${{ secrets.VITE_API_ENDPOINT}}
+
+jobs:
+  deploy-frontend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./frontend
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 1
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: "14"
+
+      - name: Cache node modules
+        uses: actions/cache@v2
+        id: cache-yarn
+        with:
+          path: "**/node_modules"
+          key: ${{ runner.OS }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.OS }}-yarn-
+
+      - name: Install deps
+        if: steps.cache-yarn.outputs.cache-hit != 'true'
+        run: yarn
+
+      - name: Build
+        run: yarn build
+
+      - name: Setup Cloud SDK
+        uses: google-github-actions/setup-gcloud@v0.2.0
+        with:
+          project_id: ${{ env.PROJECT_ID }}
+          service_account_key: ${{ env.SA_KEY }}
+          export_default_credentials: true
+
+      - name: upload-files
+        run: |
+          gsutil -m -d cp -a public-read -R dist/* ${{ env.BUCKET }} 
+      
+      # TODO: setup Cache-Control

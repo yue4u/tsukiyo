@@ -3,13 +3,13 @@ import "firebase/auth";
 // import "@firebase/auth/dist/auth.esm.js";
 import { authExchange as createAuthExchange } from "@urql/exchange-auth";
 import { makeOperation } from "@urql/vue";
-const { VITE_APIKEY, VITE_AUTHDOMAIN } = import.meta.env;
+const { VITE_API_KEY, VITE_AUTH_DOMAIN } = import.meta.env;
 
 export type User = firebase.User;
 
 export const app = firebase.initializeApp({
-  apiKey: VITE_APIKEY,
-  authDomain: VITE_AUTHDOMAIN,
+  apiKey: VITE_API_KEY,
+  authDomain: VITE_AUTH_DOMAIN,
 });
 
 export function waitForAuth(): Promise<User | null> {
