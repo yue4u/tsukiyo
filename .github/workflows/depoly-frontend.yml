@@ -6,7 +6,6 @@ on:
       - master
 
 # adapted form https://github.com/google-github-actions/deploy-cloudrun/blob/main/.github/workflows/example-workflow.yaml
-name: Build and Deploy a Container
 env:
   BUCKET: ${{ secrets.GCP_BUCKET }}
   SA_KEY: ${{ secrets.GCP_SA_KEY }}
@@ -56,6 +55,6 @@ jobs:
 
       - name: upload-files
         run: |
-          gsutil -m -d cp -a public-read -R dist/* ${{ env.BUCKET }} 
-      
+          gsutil -m -d cp -a public-read -R dist/* ${{ env.BUCKET }}
+
       # TODO: setup Cache-Control
