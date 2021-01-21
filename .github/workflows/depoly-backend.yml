@@ -10,12 +10,16 @@ name: Build and Deploy a Container
 env:
   PROJECT_ID: ${{ secrets.GCP_PROJECT }}
   SERVICE: ${{ secrets.GCP_SERVICE }}
+  BUCKET: ${{ secrets.GCP_BUCKET }}
   SA_KEY: ${{ secrets.GCP_SA_KEY }}
   REGION: asia-northeast1
 
 jobs:
-  deploy:
+  deploy-backend:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./backend
     steps:
     - name: Checkout
       uses: actions/checkout@v2
@@ -31,8 +35,8 @@ jobs:
       run: gcloud auth configure-docker
 
     - name: Build and Push Container
-      run: |-
-        docker build -t asia.gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{  github.sha }} backend/
+      run: |
+        docker build -t asia.gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{  github.sha }} .
         docker push asia.gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{  github.sha }}
 
     - name: Deploy to Cloud Run
@@ -42,6 +46,3 @@ jobs:
         service: ${{ env.SERVICE }}
         image: asia.gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{  github.sha }}
         region: ${{ env.REGION }}
-
-    - name: Show Output
-      run: echo ${{ steps.deploy.outputs.url }}
