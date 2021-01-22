@@ -1,5 +1,4 @@
 <template>
-  <h1>create new event</h1>
   <form class="form" @submit.prevent="submit">
     <label for="title">title</label>
     <input autocomplete="off" id="title" v-model="title" />
@@ -12,7 +11,7 @@
     <label for="fee">fee</label>
     <input autocomplete="off" id="fee" v-model="fee" />
     <label for="ogpImg">ogpImg</label>
-    <input autocomplete="off" id="ogpImg" v-model="ogpImg" />
+    <input autocomplete="off" type="file" id="ogpImg" />
     <label for="startTime">startTime</label>
     <input autocomplete="off" id="startTime" v-model="startTime" type="date" />
     <label for="endTime">endTime</label>
@@ -35,7 +34,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, computed } from "vue";
+import { ref, reactive, computed, shallowRef } from "vue";
 // @ts-ignore
 import marked from "@/node_modules/marked/lib/marked.esm.js";
 import { useMutation, CombinedError } from "@urql/vue";
@@ -47,7 +46,7 @@ const body = ref("# new event");
 const genre = ref("genre");
 const tag = ref("");
 const fee = ref(0);
-const ogpImg = ref("");
+const ogpImg = shallowRef<File>();
 const startTime = ref(now);
 const endTime = ref(now);
 const published = ref(false);

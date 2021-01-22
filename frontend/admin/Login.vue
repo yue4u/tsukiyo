@@ -1,21 +1,55 @@
 <template>
-  <h1 v-if="state.pending">waiting user...</h1>
-  <form v-else-if="!state.user" @submit.prevent="login">
-    <label for="email" type="text">email</label>
-    <input id="email" type="text" v-model="email" />
-    <label for="password" type="text">password</label>
-    <input id="password" type="text" v-model="password" />
-    <button class="full" type="submit">login</button>
-  </form>
-  <p v-if="state.user">{{ state.user }}</p>
-  <p class="error" v-if="state.error">{{ state.error }}</p>
+  <div>
+    <h1 v-if="state.pending">waiting user...</h1>
+    <form
+      class="p-10 mx-auto text-2xl"
+      v-else-if="!state.user"
+      @submit.prevent="login"
+    >
+      <label
+        class="h-8 mr-10 font-bold text-right align-text-bottom"
+        for="email"
+        type="text"
+      >
+        email
+      </label>
+      <input
+        id="email"
+        class="h-8 bg-transparent border-black border-b-2 focus:border-indigo-300"
+        type="text"
+        v-model="email"
+      />
+      <label
+        class="h-8 mr-10 font-bold text-right align-text-bottom"
+        for="password"
+        type="text"
+      >
+        password
+      </label>
+      <input
+        id="password"
+        class="h-8 bg-transparent border-black border-b-2 focus:border-indigo-300"
+        type="text"
+        v-model="password"
+      />
+      <button
+        class="box-border full w-full mt-20 m-auto bg-black text-white p-3 rounded-lg"
+        type="submit"
+      >
+        login
+      </button>
+    </form>
+    <p class="text-red-600 font-bold" v-if="state.error">{{ state.error }}</p>
+  </div>
 </template>
 
 <script setup lang="ts">
 import { ref, reactive } from "vue";
+import { useRouter } from "vue-router";
 import { app } from "@/utils/auth";
 import type { User } from "@/utils/auth";
 
+const router = useRouter();
 const email = ref("");
 const password = ref("");
 const state = reactive({
@@ -29,6 +63,7 @@ app.auth().onAuthStateChanged((maybeUser) => {
   if (maybeUser) {
     state.user = maybeUser;
     state.error = null;
+    router.push("/admin");
   } else {
     state.user = null;
   }
@@ -50,6 +85,8 @@ const login = async () => {
 form {
   display: grid;
   grid-template-columns: 1fr 1fr;
+}
+.label {
 }
 .error {
   color: red;

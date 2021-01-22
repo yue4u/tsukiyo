@@ -6,25 +6,34 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
     name: "Home",
-    component: Home,
+    component: import("@/open/Home.vue"),
   },
   {
-    path: "/admin/login",
-    name: "Login",
-    component: () =>
-      import(/* webpackChunkName: "Login" */ "@/admin/Login.vue"),
-  },
-  {
-    path: "/admin/event-editor",
-    name: "EventEditor",
-    component: () =>
-      import(/* webpackChunkName: "EventEditor" */ "@/admin/EventEditor.vue"),
-  },
-  {
-    path: "/admin/event-list",
-    name: "EventList",
-    component: () =>
-      import(/* webpackChunkName: "EventEditor" */ "@/admin/EventList.vue"),
+    path: "/admin",
+    name: "Admin",
+    component: () => import("@/admin/Console.vue"),
+    children: [
+      {
+        path: "/admin/login",
+        name: "Login",
+        component: () => import("@/admin/Login.vue"),
+      },
+      {
+        path: "/admin/contact-list",
+        name: "ContactList",
+        component: () => import("@/admin/ContactList.vue"),
+      },
+      {
+        path: "/admin/event-editor",
+        name: "EventEditor",
+        component: () => import("@/admin/EventEditor.vue"),
+      },
+      {
+        path: "/admin/event-list",
+        name: "EventList",
+        component: () => import("@/admin/EventList.vue"),
+      },
+    ],
   },
 ];
 
