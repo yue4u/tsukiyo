@@ -100,6 +100,7 @@ import Label from "./EditorLabel.vue";
 import marked from "@/node_modules/marked/lib/marked.esm.js";
 import { useQuery, useMutation } from "@urql/vue";
 import { useRouter } from "vue-router";
+import { maybeTimestamp, maybeDateString } from '@/utils'
 
 const inputClass =
   "border-grey-300 border-b mx-5 focus:border-black outline-none";
@@ -113,7 +114,13 @@ const returnToList = () => {
   router.push("/admin/event-list");
 };
 
-const form = reactive<{ event: EventInput }>({
+type EventForm = {
+  event: Omit<EventInput, 'startAt' | 'endAt'> & {
+    startAt?: string | null, endAt?: string | null,
+  }
+}
+
+const form = reactive<EventForm>({
   event: {
     slug: undefined,
     title: "",
@@ -153,9 +160,15 @@ const { fetching, data } = useQuery<{ event: Event }>({
 watch(
   () => data?.value,
   () => {
-    if (data.value?.event) {
-      form.event = { ...form.event, ...data.value.event };
+    if (!data.value?.event) {
+      return
     }
+    form.event = {
+      ...form.event,
+      ...data.value.event,
+      startAt: maybeDateString(data.value.event.startAt),
+      endAt: maybeDateString(data.value.event.endAt)
+    };
   }
 );
 
@@ -175,8 +188,8 @@ const submit = async () => {
   const action = async () => {
     const input: EventInput | EventUpdate = {
       ...toRaw(form.event),
-      startAt: +form.event.startAt,
-      endAt: +form.event.endAt,
+      startAt: maybeTimestamp(form.event.startAt),
+      endAt: maybeTimestamp(form.event.endAt),
     };
     if (isCreate.value) {
       return createEvent(input);

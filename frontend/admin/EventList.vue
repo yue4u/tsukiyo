@@ -18,8 +18,8 @@
             {{ event.pageView }}
             views
           </span>
-          <time>{{ dateTime.format(event.createdAt) }}</time>
-          <time>{{ dateTime.format(event.updatedAt) }}</time>
+          <time v-if="event.createdAt">{{ dateTime.format(event.createdAt) }}</time>
+          <time v-if="event.updatedAt">{{ dateTime.format(event.updatedAt) }}</time>
         </router-link>
       </li>
     </ul>
@@ -27,7 +27,7 @@
 </template>
 
 <script setup lang="ts">
-import { useQuery, useMutation } from "@urql/vue";
+import { useQuery } from "@urql/vue";
 import type { Event } from "@/type/gql";
 import { dateTime } from "@/utils";
 

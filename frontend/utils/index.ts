@@ -18,3 +18,21 @@ export const dateTime = new Intl.DateTimeFormat("ja", {
   // hourCycle: "h11" | "h12" | "h23" | "h24",
   // formatMatcher: "basic" | "best fit",
 });
+
+export const maybeTimestamp = (maybeNum?: string | null) => {
+  if (!maybeNum) return undefined;
+  try {
+    return new Date(maybeNum).getTime();
+  } catch {
+    return undefined;
+  }
+};
+
+export const maybeDateString = (maybeDateString?: number | null) => {
+  if (!maybeDateString) return undefined;
+  try {
+    return new Date(maybeDateString).toISOString().split("T")[0];
+  } catch {
+    return undefined;
+  }
+};

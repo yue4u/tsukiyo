@@ -24,6 +24,7 @@ module.exports = {
     // no longer needed
     "vue/no-multiple-template-root": 0,
     "vue/html-indent": "off",
+    "@typescript-eslint/explicit-module-boundary-types": "off",
   },
   overrides: [
     {
