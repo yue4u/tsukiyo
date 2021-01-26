@@ -14,10 +14,9 @@
 </template>
 
 <script setup lang="ts">
-import { useQuery, useMutation } from "@urql/vue";
-import { onMounted } from "vue";
+import { useQuery } from "@urql/vue";
 
-const { fetching, data, error, executeQuery } = useQuery({
+const { fetching, data, error } = useQuery({
   query: `
         {
           contacts {
