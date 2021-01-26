@@ -3,16 +3,16 @@
   <div v-else-if="error">Oh no... {{ error }}</div>
   <div v-else>
     <div v-if="!data?.events?.length">There is no events</div>
-    <p class="text-left text-lg mb-5" v-else>There is {{ data.events.length }} events</p>
+    <p v-else class="text-left text-lg mb-5">There is {{ data.events.length }} events</p>
 
-    <ul class="grid gap-y-5" v-if="data">
+    <ul v-if="data" class="grid gap-y-5">
       <li v-for="event in data.events" :key="event.id">
         <router-link class="grid grid-cols-5" :to="`/admin/event-editor?id=${event.id}`">
           <span
-            class="inline-grid place-items-center w-18 px-3 bg-green-200 rounded-md"
             v-if="event.published"
+            class="inline-grid place-items-center w-18 px-3 bg-green-200 rounded-md"
           >published</span>
-          <span class="inline-grid place-items-center w-18 px-3 bg-gray-200 rounded-md" v-else>draft</span>
+          <span v-else class="inline-grid place-items-center w-18 px-3 bg-gray-200 rounded-md">draft</span>
           <span>{{ event.title }}</span>
           <span>
             {{ event.pageView }}
@@ -29,8 +29,7 @@
 <script setup lang="ts">
 import { useQuery, useMutation } from "@urql/vue";
 import type { Event } from "@/type/gql";
-import { dateTime } from '@/utils'
-
+import { dateTime } from "@/utils";
 
 const { fetching, data, error } = useQuery<{ events: Event[] }>({
   query: `
@@ -50,11 +49,9 @@ const { fetching, data, error } = useQuery<{ events: Event[] }>({
             published
           }
         }
-      `, requestPolicy: 'network-only'
+      `,
+  requestPolicy: "network-only",
 });
-
-
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

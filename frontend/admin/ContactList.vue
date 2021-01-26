@@ -5,7 +5,7 @@
   <div v-else-if="error">Oh no... {{ error }}</div>
   <div v-else>
     <ul v-if="data">
-      <li class="contact" v-for="contact in data.contacts" :key="contact.id">
+      <li v-for="contact in data.contacts" :key="contact.id" class="contact">
         {{ contact.id }} )
         {{ contact.title }}
       </li>
@@ -26,9 +26,9 @@ const { fetching, data, error, executeQuery } = useQuery({
             title
           }
         }
-      `, requestPolicy: 'network-only'
+      `,
+  requestPolicy: "network-only",
 });
-
 </script>
 
 <style lang="scss" scoped>

@@ -1,10 +1,10 @@
 <template>
   <div class="my-2">
     <input
+      v-model="value"
       class="input px-1 py-2 outline-none"
       type="text"
       :placeholder="name"
-      v-model="value"
     />
   </div>
 </template>

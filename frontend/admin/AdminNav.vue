@@ -1,7 +1,7 @@
 <template>
   <nav>
     <ul>
-      <li class="py-4" v-for="link in links" :key="link.path">
+      <li v-for="link in links" :key="link.path" class="py-4">
         <router-link class="block" :to="link.path">
           <span class="w-full block text-left font-bold">{{ link.title }}</span>
         </router-link>

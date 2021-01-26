@@ -7,68 +7,68 @@
   >
     <Label class="w-10" for="title">title</Label>
     <input
+      id="title"
+      v-model="form.event.title"
       :class="inputClass"
       autocomplete="off"
       placeholder="title"
-      id="title"
-      v-model="form.event.title"
     />
     <Label class="w-10" for="slug">slug</Label>
     <input
+      id="slug"
+      v-model="form.event.slug"
       :class="inputClass"
       autocomplete="off"
       placeholder="/slug"
-      id="slug"
-      v-model="form.event.slug"
     />
     <Label class="w-10" for="genre">genre</Label>
     <input
+      id="genre"
+      v-model="form.event.genre"
       :class="inputClass"
       autocomplete="off"
       placeholder="genre"
-      id="genre"
-      v-model="form.event.genre"
     />
     <Label class="w-10" for="tag">tag</Label>
     <input
+      id="tag"
+      v-model="form.event.tag"
       :class="inputClass"
       autocomplete="off"
       placeholder="tag"
-      id="tag"
-      v-model="form.event.tag"
     />
     <Label class="w-10" for="fee">fee</Label>
-    <input :class="inputClass" autocomplete="off" placeholder="0" id="fee" v-model="form.event.fee" />
+    <input id="fee" v-model="form.event.fee" :class="inputClass" autocomplete="off" placeholder="0" />
     <Label class="w-10" for="ogpImg">ogpImg</Label>
-    <input :class="inputClass" autocomplete="off" type="file" id="ogpImg" />
+    <input id="ogpImg" :class="inputClass" autocomplete="off" type="file" />
     <Label class="w-10" for="startAt">startAt</Label>
     <input
-      :class="inputClass"
-      autocomplete="off"
       id="startAt"
       v-model="form.event.startAt"
+      :class="inputClass"
+      autocomplete="off"
       type="date"
     />
     <Label class="w-10" for="endAt">endAt</Label>
-    <input :class="inputClass" autocomplete="off" id="endAt" v-model="form.event.endAt" type="date" />
+    <input id="endAt" v-model="form.event.endAt" :class="inputClass" autocomplete="off" type="date" />
     <Label class="w-10" for="published">published</Label>
     <input
+      id="published"
+      v-model="form.event.published"
       :class="inputClass"
       class="w-min mx-5"
       type="checkbox"
-      id="published"
-      v-model="form.event.published"
     />
     <Label class="w-10 col-start-1" for="memo">memo</Label>
     <textarea
-      class="memo col-span-3 h-36 border-b mx-5 focus:border-black outline-none resize-none"
       id="memo"
-      placeholder="random memo"
       v-model="form.event.memo"
+      class="memo col-span-3 h-36 border-b mx-5 focus:border-black outline-none resize-none"
+      placeholder="random memo"
     />
     <textarea
-      class="col-span-2 h-48 border-b mx-5 focus:border-black outline-none resize-none"
       v-model="form.event.body"
+      class="col-span-2 h-48 border-b mx-5 focus:border-black outline-none resize-none"
     />
     <div class="view col-span-2" v-html="markdown" />
     <div class="flex col-span-4 justify-between my-10 gap-2">
@@ -88,8 +88,8 @@
       >delete</button>
     </div>
   </form>
-  <div class v-if="state.data">{{ state.data }}</div>
-  <div class="text-red-500" v-if="state.error">{{ state.error }}</div>
+  <div v-if="state.data" class>{{ state.data }}</div>
+  <div v-if="state.error" class="text-red-500">{{ state.error }}</div>
 </template>
 
 <script setup lang="ts">

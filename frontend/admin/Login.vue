@@ -2,8 +2,8 @@
   <div>
     <h1 v-if="state.pending">waiting user...</h1>
     <form
-      class="p-10 mx-auto text-2xl"
       v-else-if="!state.user"
+      class="p-10 mx-auto text-2xl"
       @submit.prevent="login"
     >
       <label
@@ -15,9 +15,9 @@
       </label>
       <input
         id="email"
+        v-model="email"
         class="h-8 bg-transparent border-black border-b-2 focus:border-indigo-300"
         type="text"
-        v-model="email"
       />
       <label
         class="h-8 mr-10 font-bold text-right align-text-bottom"
@@ -28,9 +28,9 @@
       </label>
       <input
         id="password"
+        v-model="password"
         class="h-8 bg-transparent border-black border-b-2 focus:border-indigo-300"
         type="text"
-        v-model="password"
       />
       <button
         class="box-border full w-full mt-20 m-auto bg-black text-white p-3 rounded-lg"
@@ -39,7 +39,7 @@
         login
       </button>
     </form>
-    <p class="text-red-600 font-bold" v-if="state.error">{{ state.error }}</p>
+    <p v-if="state.error" class="text-red-600 font-bold">{{ state.error }}</p>
   </div>
 </template>
 

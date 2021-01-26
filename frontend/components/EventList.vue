@@ -6,9 +6,9 @@
   <div v-else>
     <ul v-if="data">
       <li
-        class="event"
         v-for="event in data.events"
         :key="event.id"
+        class="event"
         @click="deleteEvent({ id: event.id })"
       >
         {{ event.id }} )
@@ -21,7 +21,6 @@
 <script setup lang="ts">
 import { useQuery, useMutation } from "@urql/vue";
 
-
 const { fetching, data, error } = useQuery({
   query: `
         {
@@ -31,7 +30,7 @@ const { fetching, data, error } = useQuery({
           }
         }
       `,
-  requestPolicy: 'network-only'
+  requestPolicy: "network-only",
 });
 
 const { executeMutation: deleteEvent } = useMutation(`
@@ -40,7 +39,7 @@ const { executeMutation: deleteEvent } = useMutation(`
       id
     }
   }
-`,);
+`);
 </script>
 
 <style lang="scss" scoped>

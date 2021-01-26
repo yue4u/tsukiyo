@@ -28,10 +28,9 @@ import Logo from "@/components/Logo.vue";
 
 // @ts-ignore
 import AdminNav from "@/admin/AdminNav.vue";
-import { currentUser, logout } from '@/utils/auth'
+import { currentUser, logout } from "@/utils/auth";
 
 const isLogin = useRoute().name == "Login";
-
 </script>
 
 <style lang="scss" scoped>
