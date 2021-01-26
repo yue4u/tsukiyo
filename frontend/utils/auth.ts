@@ -1,8 +1,10 @@
 import firebase from "firebase/app";
+import { ref } from "vue";
 import "firebase/auth";
 // import "@firebase/auth/dist/auth.esm.js";
 import { authExchange as createAuthExchange } from "@urql/exchange-auth";
 import { makeOperation } from "@urql/vue";
+
 const { VITE_API_KEY, VITE_AUTH_DOMAIN } = import.meta.env;
 
 export type User = firebase.User;
@@ -12,6 +14,20 @@ export const app = firebase.initializeApp({
   authDomain: VITE_AUTH_DOMAIN,
 });
 
+export const currentUser = ref<User | null>(null);
+
+app.auth().onAuthStateChanged((maybeUser) => {
+  currentUser.value = maybeUser;
+  console.log(currentUser.value);
+});
+
+export async function logout() {
+  currentUser.value = null;
+  return firebase.auth().signOut();
+}
+/**
+ * we need this to check auth before handle gql api
+ */
 export function waitForAuth(): Promise<User | null> {
   return new Promise((resolve) => {
     app.auth().onAuthStateChanged((maybeUser) => {
@@ -29,8 +45,8 @@ export const authExchange = createAuthExchange<string | undefined>({
     if (authState) {
       return null;
     }
-    const maybeUser = await waitForAuth();
-    return maybeUser?.getIdToken();
+    await waitForAuth();
+    return currentUser.value?.getIdToken();
   },
   // TODO: fix this type
   // @ts-ignore

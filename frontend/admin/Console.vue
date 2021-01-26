@@ -1,6 +1,13 @@
 <template>
-  <header class="bg-black mb-5">
-    <Logo class="-translate-y-10 shadow-lg" />
+  <header class="bg-black mb-5 relative h-20">
+    <Logo class="shadow-lg" />
+    <span
+      v-if="currentUser"
+      class="text-white inline-grid absolute right-2 top-0 z-10 h-20 place-items-center justify-center"
+    >
+      {{ currentUser?.email }}
+      <span class="underline cursor-pointer" @click="logout">Logout</span>
+    </span>
   </header>
   <div v-if="isLogin">
     <router-view />
@@ -16,16 +23,14 @@
 </template>
 
 <script setup lang="ts">
-import { provide } from "vue";
 import { useRoute } from "vue-router";
 import Logo from "@/components/Logo.vue";
+
 // @ts-ignore
 import AdminNav from "@/admin/AdminNav.vue";
-import { events, eventsSymbol, contacts, contactsSymbol } from './admin-store'
-const isLogin = useRoute().name == "Login";
+import { currentUser, logout } from '@/utils/auth'
 
-provide(eventsSymbol, events);
-provide(contactsSymbol, contacts);
+const isLogin = useRoute().name == "Login";
 
 </script>
 

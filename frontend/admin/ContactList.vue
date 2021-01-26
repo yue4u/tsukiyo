@@ -16,9 +16,6 @@
 <script setup lang="ts">
 import { useQuery, useMutation } from "@urql/vue";
 import { onMounted } from "vue";
-import { useEvents } from "./admin-store";
-
-const events = useEvents();
 
 const { fetching, data, error, executeQuery } = useQuery({
   query: `

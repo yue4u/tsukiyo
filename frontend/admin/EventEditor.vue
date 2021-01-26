@@ -99,37 +99,35 @@ import Label from "./EditorLabel.vue";
 // @ts-ignore
 import marked from "@/node_modules/marked/lib/marked.esm.js";
 import { useQuery, useMutation } from "@urql/vue";
-import { useRouter } from 'vue-router'
+import { useRouter } from "vue-router";
 
 const inputClass =
   "border-grey-300 border-b mx-5 focus:border-black outline-none";
-const router = useRouter()
+const router = useRouter();
 const { id } = router.currentRoute.value.query;
 
 const isCreate = computed(() => !router.currentRoute.value.query.id);
 const [now] = new Date().toISOString().split("T");
 
 const returnToList = () => {
-  router.push('/admin/event-list')
-}
+  router.push("/admin/event-list");
+};
 
-const form = reactive<{ event: EventInput }>(
-  {
-    event: {
-      slug: undefined,
-      title: "",
-      body: "# new event",
-      genre: "genre",
-      tag: undefined,
-      fee: 0,
-      ogpImg: undefined,
-      startAt: now,
-      endAt: now,
-      published: false,
-      memo: undefined,
-    }
-  }
-);
+const form = reactive<{ event: EventInput }>({
+  event: {
+    slug: undefined,
+    title: "",
+    body: "# new event",
+    genre: "genre",
+    tag: undefined,
+    fee: 0,
+    ogpImg: undefined,
+    startAt: now,
+    endAt: now,
+    published: false,
+    memo: undefined,
+  },
+});
 
 const { fetching, data } = useQuery<{ event: Event }>({
   query: `
@@ -147,25 +145,27 @@ const { fetching, data } = useQuery<{ event: Event }>({
          published
        }
     }`,
-  variables: { id: +id },
+  variables: { id: +id! },
   pause: isCreate,
-  requestPolicy: 'cache-and-network'
+  requestPolicy: "cache-and-network",
 });
 
-watch(() => data?.value, () => {
-  console.log(data.value.event.title)
-  if (data.value?.event) {
-    form.event = { ...form.event, ...data.value.event }
+watch(
+  () => data?.value,
+  () => {
+    if (data.value?.event) {
+      form.event = { ...form.event, ...data.value.event };
+    }
   }
-})
-
+);
 
 const markdown = computed(() => {
   return marked(form.event.body, { sanitize: true });
 });
 
 const state = reactive<{
-  data: any, error: string | undefined
+  data: any;
+  error: string | undefined;
 }>({
   data: undefined,
   error: undefined,
@@ -173,20 +173,22 @@ const state = reactive<{
 
 const submit = async () => {
   const action = async () => {
-    const input: EventInput | EventUpdate = { ...toRaw(form.event), startAt: +form.event.startAt, endAt: +form.event.endAt };
-    if (isCreate) {
-      // TODO: fix this
+    const input: EventInput | EventUpdate = {
+      ...toRaw(form.event),
+      startAt: +form.event.startAt,
+      endAt: +form.event.endAt,
+    };
+    if (isCreate.value) {
       return createEvent(input);
     } else {
-      // TODO: fix this
       return updateEvent({ id: +id!, ...input });
     }
-  }
+  };
   const { data, error } = await action();
   state.data = data;
   state.error = error?.message;
   if (error) {
-    return
+    return;
   }
   returnToList();
 };
@@ -259,7 +261,6 @@ const { executeMutation: updateEvent } = useMutation(`
   }
 `);
 
-
 const { executeMutation: deleteEventMutation } = useMutation(`
   mutation ($id: Int!) {
     deleteEvent(id: $id) {
@@ -270,8 +271,8 @@ const { executeMutation: deleteEventMutation } = useMutation(`
 
 const deleteEvent = () => {
   deleteEventMutation({ id: +id! });
-  returnToList()
-}
+  returnToList();
+};
 </script>
 
 <style lang="scss" scoped>

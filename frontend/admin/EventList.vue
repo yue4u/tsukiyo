@@ -3,16 +3,16 @@
   <div v-else-if="error">Oh no... {{ error }}</div>
   <div v-else>
     <div v-if="!data?.events?.length">There is no events</div>
-    <p class="text-left" v-else>There is {{ data.events.length }} events</p>
+    <p class="text-left text-lg mb-5" v-else>There is {{ data.events.length }} events</p>
 
     <ul class="grid gap-y-5" v-if="data">
       <li v-for="event in data.events" :key="event.id">
         <router-link class="grid grid-cols-5" :to="`/admin/event-editor?id=${event.id}`">
           <span
-            class="inline-grid place-items-center w-min px-3 bg-green-300"
+            class="inline-grid place-items-center w-18 px-3 bg-green-200 rounded-md"
             v-if="event.published"
           >published</span>
-          <span class="inline-grid place-items-center w-min px-3 bg-gray-300" v-else>draft</span>
+          <span class="inline-grid place-items-center w-18 px-3 bg-gray-200 rounded-md" v-else>draft</span>
           <span>{{ event.title }}</span>
           <span>
             {{ event.pageView }}
@@ -28,10 +28,8 @@
 
 <script setup lang="ts">
 import { useQuery, useMutation } from "@urql/vue";
-import { watch } from "vue";
 import type { Event } from "@/type/gql";
 import { dateTime } from '@/utils'
-import { useEvents } from './admin-store'
 
 
 const { fetching, data, error } = useQuery<{ events: Event[] }>({
@@ -55,21 +53,7 @@ const { fetching, data, error } = useQuery<{ events: Event[] }>({
       `, requestPolicy: 'network-only'
 });
 
-const events = useEvents();
 
-watch(() => data, () => {
-  data?.events.forEach(event => {
-    events[event.id] = event
-  });
-})
-
-const { executeMutation: deleteEvent } = useMutation(`
-  mutation ($id: Int!) {
-    deleteEvent(id: $id) {
-      id
-    }
-  }
-`);
 </script>
 
 <style lang="scss" scoped>
