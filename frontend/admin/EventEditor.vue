@@ -106,7 +106,7 @@ const inputClass =
 const router = useRouter()
 const { id } = router.currentRoute.value.query;
 
-const isCreate = !id;
+const isCreate = computed(() => !router.currentRoute.value.query.id);
 const [now] = new Date().toISOString().split("T");
 
 const returnToList = () => {
