@@ -24,8 +24,8 @@ export type Event = {
   tag?: Maybe<Scalars['String']>;
   fee?: Maybe<Scalars['Int']>;
   ogpImg?: Maybe<Scalars['String']>;
-  startTime?: Maybe<Scalars['NaiveDateTime']>;
-  endTime?: Maybe<Scalars['NaiveDateTime']>;
+  startAt?: Maybe<Scalars['NaiveDateTime']>;
+  endAt?: Maybe<Scalars['NaiveDateTime']>;
   publishAt?: Maybe<Scalars['NaiveDateTime']>;
   updatedAt?: Maybe<Scalars['NaiveDateTime']>;
   pageView: Scalars['Int'];
@@ -43,11 +43,11 @@ export type EventUpdate = {
   tag?: Maybe<Scalars['String']>;
   fee?: Maybe<Scalars['Int']>;
   ogpImg?: Maybe<Scalars['String']>;
-  startTime?: Maybe<Scalars['NaiveDateTime']>;
-  endTime?: Maybe<Scalars['NaiveDateTime']>;
+  startAt?: Maybe<Scalars['NaiveDateTime']>;
+  endAt?: Maybe<Scalars['NaiveDateTime']>;
   publishAt?: Maybe<Scalars['NaiveDateTime']>;
   updatedAt?: Maybe<Scalars['NaiveDateTime']>;
-  pageView: Scalars['Int'];
+  pageView?: Maybe<Scalars['Int']>;
   creatorId?: Maybe<Scalars['Int']>;
   published?: Maybe<Scalars['Boolean']>;
   memo?: Maybe<Scalars['String']>;
@@ -91,8 +91,8 @@ export type EventInput = {
   tag?: Maybe<Scalars['String']>;
   fee?: Maybe<Scalars['Int']>;
   ogpImg?: Maybe<Scalars['String']>;
-  startTime?: Maybe<Scalars['NaiveDateTime']>;
-  endTime?: Maybe<Scalars['NaiveDateTime']>;
+  startAt?: Maybe<Scalars['NaiveDateTime']>;
+  endAt?: Maybe<Scalars['NaiveDateTime']>;
   creatorId?: Maybe<Scalars['Int']>;
   published?: Maybe<Scalars['Boolean']>;
   memo?: Maybe<Scalars['String']>;

@@ -5,6 +5,7 @@ use super::schema::{create_schema, Schema};
 use crate::Context;
 use crate::{auth, sql::db::Pool};
 
+
 pub(crate) async fn graphql(
     req: HttpRequest,
     pool: web::Data<Pool>,
@@ -15,6 +16,9 @@ pub(crate) async fn graphql(
         pool: pool.get_ref().to_owned(),
         user: auth::get_user(&req).await.ok(),
     };
+    #[cfg(debug_assertions)]
+    dbg!(&data);
+
     #[cfg(debug_assertions)]
     let res = data.execute(&schema.admin, &ctx).await;
 

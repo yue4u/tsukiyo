@@ -1,6 +1,4 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
-import Home from "../open/Home.vue";
-import Order from "../open/Order.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -12,6 +10,10 @@ const routes: Array<RouteRecordRaw> = [
     path: "/admin",
     name: "Admin",
     component: () => import("@/admin/Console.vue"),
+    // beforeEnter: (to, from, next) => {
+    //   console.log(to.name);
+    //   next();
+    // },
     children: [
       {
         path: "/admin/login",

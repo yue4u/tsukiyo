@@ -5,12 +5,7 @@
   <div v-else-if="error">Oh no... {{ error }}</div>
   <div v-else>
     <ul v-if="data">
-      <li
-        class="contact"
-        v-for="contact in data.contacts"
-        :key="contact.id"
-        @click="deleteEvent({ id: contact.id })"
-      >
+      <li class="contact" v-for="contact in data.contacts" :key="contact.id">
         {{ contact.id }} )
         {{ contact.title }}
       </li>
@@ -21,12 +16,9 @@
 <script setup lang="ts">
 import { useQuery, useMutation } from "@urql/vue";
 import { onMounted } from "vue";
+import { useEvents } from "./admin-store";
 
-onMounted(() => {
-  executeQuery({
-    requestPolicy: "network-only",
-  });
-});
+const events = useEvents();
 
 const { fetching, data, error, executeQuery } = useQuery({
   query: `
@@ -37,16 +29,9 @@ const { fetching, data, error, executeQuery } = useQuery({
             title
           }
         }
-      `,
+      `, requestPolicy: 'network-only'
 });
 
-const { executeMutation: deleteEvent } = useMutation(`
-  mutation ($id: Int!) {
-    deleteEvent(id: $id) {
-      id
-    }
-  }
-`);
 </script>
 
 <style lang="scss" scoped>

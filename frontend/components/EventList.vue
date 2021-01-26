@@ -20,15 +20,9 @@
 
 <script setup lang="ts">
 import { useQuery, useMutation } from "@urql/vue";
-import { onMounted } from "vue";
 
-onMounted(() => {
-  executeQuery({
-    requestPolicy: "network-only",
-  });
-});
 
-const { fetching, data, error, executeQuery } = useQuery({
+const { fetching, data, error } = useQuery({
   query: `
         {
           events {
@@ -37,6 +31,7 @@ const { fetching, data, error, executeQuery } = useQuery({
           }
         }
       `,
+  requestPolicy: 'network-only'
 });
 
 const { executeMutation: deleteEvent } = useMutation(`
@@ -45,7 +40,7 @@ const { executeMutation: deleteEvent } = useMutation(`
       id
     }
   }
-`);
+`,);
 </script>
 
 <style lang="scss" scoped>

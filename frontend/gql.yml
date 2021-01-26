@@ -10,3 +10,5 @@ generates:
     config:
       skipTypename: true
       useTypeImports: true
+      namingConvention:
+        typeNames: change-case#pascalCase
