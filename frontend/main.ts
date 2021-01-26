@@ -8,7 +8,7 @@ import urql, {
 } from "@urql/vue";
 import App from "@/App.vue";
 // import "@/registerServiceWorker";
-import "./index.css";
+import "@/index.css";
 import router from "@/router";
 // TODO: conditionally import this since only admin needs this
 import { authExchange } from "@/utils/auth";

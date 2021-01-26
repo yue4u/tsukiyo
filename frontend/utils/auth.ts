@@ -17,7 +17,6 @@ export const currentUser = ref<User | null>(null);
 
 app.auth().onAuthStateChanged((maybeUser) => {
   currentUser.value = maybeUser;
-  console.log(currentUser.value);
 });
 
 export async function logout() {
