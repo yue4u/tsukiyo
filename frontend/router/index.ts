@@ -4,7 +4,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
     name: "Home",
-    component: import("@/open/Home.vue"),
+    component: () => import("@/open/Home.vue"),
   },
   {
     path: "/admin",
