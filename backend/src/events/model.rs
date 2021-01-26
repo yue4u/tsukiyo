@@ -28,7 +28,7 @@ pub struct Event {
     pub memo: Option<String>,
 }
 
-#[derive(Queryable, Serialize, Deserialize, GraphQLObject)]
+#[derive(Queryable, Debug, Serialize, Deserialize, GraphQLObject)]
 #[graphql(description = "Event data which is ok to be public")]
 pub struct EventPublic {
     pub id: i32,

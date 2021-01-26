@@ -12,13 +12,14 @@ pub fn get(ctx: &Context, event_id: i32) -> anyhow::Result<Event> {
 /// see https://github.com/diesel-rs/diesel/issues/2037
 pub fn get_public(ctx: &Context, event_id: i32) -> anyhow::Result<EventPublic> {
     let conn = ctx.pool.get()?;
-    Ok(events
-        .select((
+
+    Ok(diesel::update(events.filter(id.eq(event_id)))
+        .set(page_view.eq(page_view + 1))
+        .returning((
             id, slug, title, body, genre, tag, fee, ogp_img, start_at, end_at, publish_at,
             updated_at, page_view,
         ))
-        .find(event_id)
-        .first(&conn)?)
+        .get_result::<EventPublic>(&conn)?)
 }
 
 pub fn create(ctx: &Context, event: EventInput) -> anyhow::Result<Event> {
