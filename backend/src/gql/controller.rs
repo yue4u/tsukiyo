@@ -5,7 +5,6 @@ use super::schema::{create_schema, Schema};
 use crate::Context;
 use crate::{auth, sql::db::Pool};
 
-
 pub(crate) async fn graphql(
     req: HttpRequest,
     pool: web::Data<Pool>,
