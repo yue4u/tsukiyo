@@ -16,6 +16,9 @@ pub(crate) async fn graphql(
         user: auth::get_user(&req).await.ok(),
     };
     #[cfg(debug_assertions)]
+    dbg!(&data);
+
+    #[cfg(debug_assertions)]
     let res = data.execute(&schema.admin, &ctx).await;
 
     #[cfg(not(debug_assertions))]

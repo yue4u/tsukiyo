@@ -17,8 +17,8 @@ pub struct Event {
     pub tag: Option<String>,
     pub fee: Option<i32>,
     pub ogp_img: Option<String>,
-    pub start_time: Option<NaiveDateTime>,
-    pub end_time: Option<NaiveDateTime>,
+    pub start_at: Option<NaiveDateTime>,
+    pub end_at: Option<NaiveDateTime>,
     pub publish_at: Option<NaiveDateTime>,
     pub updated_at: Option<NaiveDateTime>,
     pub page_view: i32,
@@ -28,7 +28,7 @@ pub struct Event {
     pub memo: Option<String>,
 }
 
-#[derive(Queryable, Serialize, Deserialize, GraphQLObject)]
+#[derive(Queryable, Debug, Serialize, Deserialize, GraphQLObject)]
 #[graphql(description = "Event data which is ok to be public")]
 pub struct EventPublic {
     pub id: i32,
@@ -39,8 +39,8 @@ pub struct EventPublic {
     pub tag: Option<String>,
     pub fee: Option<i32>,
     pub ogp_img: Option<String>,
-    pub start_time: Option<NaiveDateTime>,
-    pub end_time: Option<NaiveDateTime>,
+    pub start_at: Option<NaiveDateTime>,
+    pub end_at: Option<NaiveDateTime>,
     pub publish_at: Option<NaiveDateTime>,
     pub updated_at: Option<NaiveDateTime>,
     pub page_view: i32,
@@ -63,8 +63,8 @@ pub struct EventInput {
     pub fee: Option<i32>,
     #[validate(custom = "not_empty")]
     pub ogp_img: Option<String>,
-    pub start_time: Option<NaiveDateTime>,
-    pub end_time: Option<NaiveDateTime>,
+    pub start_at: Option<NaiveDateTime>,
+    pub end_at: Option<NaiveDateTime>,
     pub creator_id: Option<i32>,
     pub published: Option<bool>,
     #[validate(custom = "not_empty")]
@@ -89,11 +89,11 @@ pub struct EventUpdate {
     pub fee: Option<i32>,
     #[validate(custom = "not_empty")]
     pub ogp_img: Option<String>,
-    pub start_time: Option<NaiveDateTime>,
-    pub end_time: Option<NaiveDateTime>,
+    pub start_at: Option<NaiveDateTime>,
+    pub end_at: Option<NaiveDateTime>,
     pub publish_at: Option<NaiveDateTime>,
     pub updated_at: Option<NaiveDateTime>,
-    pub page_view: i32,
+    pub page_view: Option<i32>,
     pub creator_id: Option<i32>,
     pub published: Option<bool>,
     #[validate(custom = "not_empty")]

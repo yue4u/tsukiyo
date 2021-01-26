@@ -7,7 +7,7 @@
     "test:type": "vuedx-typecheck .",
     "test:unit": "vue-cli-service test:unit",
     "test:e2e": "vue-cli-service test:e2e",
-    "lint": "vue-cli-service lint",
+    "lint": "vue-cli-service lint \"./{open,admin,components}/**/*.{vue,ts}\"",
     "gql:gen": "graphql-codegen --config gql.yml"
   },
   "dependencies": {
@@ -43,6 +43,7 @@
     "@vuedx/typecheck": "^0.6.0",
     "@vuedx/typescript-plugin-vue": "^0.6.0",
     "autoprefixer": "^10.2.1",
+    "change-case": "^4.1.2",
     "eslint": "^7.18.0",
     "eslint-plugin-prettier": "^3.3.1",
     "eslint-plugin-vue": "^7.4.1",

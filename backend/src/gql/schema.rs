@@ -30,6 +30,12 @@ impl QueryAdmin {
         Ok(event)
     }
 
+    #[cfg(debug_assertions)]
+    fn event_public(ctx: &Context, id: i32) -> FieldResult<EventPublic> {
+        let event = events::service::get_public(ctx, id)?;
+        Ok(event)
+    }
+
     fn events(ctx: &Context, by: Option<EventQuery>) -> FieldResult<Vec<Event>> {
         let events = events::service::list(ctx, by)?;
         Ok(events)

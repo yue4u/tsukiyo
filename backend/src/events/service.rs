@@ -12,13 +12,14 @@ pub fn get(ctx: &Context, event_id: i32) -> anyhow::Result<Event> {
 /// see https://github.com/diesel-rs/diesel/issues/2037
 pub fn get_public(ctx: &Context, event_id: i32) -> anyhow::Result<EventPublic> {
     let conn = ctx.pool.get()?;
-    Ok(events
-        .select((
-            id, slug, title, body, genre, tag, fee, ogp_img, start_time, end_time, publish_at,
+
+    Ok(diesel::update(events.filter(id.eq(event_id)))
+        .set(page_view.eq(page_view + 1))
+        .returning((
+            id, slug, title, body, genre, tag, fee, ogp_img, start_at, end_at, publish_at,
             updated_at, page_view,
         ))
-        .find(event_id)
-        .first(&conn)?)
+        .get_result::<EventPublic>(&conn)?)
 }
 
 pub fn create(ctx: &Context, event: EventInput) -> anyhow::Result<Event> {
@@ -29,8 +30,9 @@ pub fn create(ctx: &Context, event: EventInput) -> anyhow::Result<Event> {
         .get_result::<Event>(&conn)?)
 }
 
-pub fn update(ctx: &Context, event_id: i32, event: EventUpdate) -> anyhow::Result<Event> {
+pub fn update(ctx: &Context, event_id: i32, mut event: EventUpdate) -> anyhow::Result<Event> {
     event.validate()?;
+    event.updated_at = Some(chrono::Utc::now().naive_utc());
     let conn = ctx.pool.get()?;
     Ok(diesel::update(events.filter(id.eq(event_id)))
         .set(&event)
@@ -84,7 +86,7 @@ pub fn list_public(ctx: &Context, by: Option<EventQuery>) -> anyhow::Result<Vec<
     // see https://github.com/diesel-rs/diesel/issues/2037
     Ok(query
         .select((
-            id, slug, title, body, genre, tag, fee, ogp_img, start_time, end_time, publish_at,
+            id, slug, title, body, genre, tag, fee, ogp_img, start_at, end_at, publish_at,
             updated_at, page_view,
         ))
         .load::<EventPublic>(&conn)?)

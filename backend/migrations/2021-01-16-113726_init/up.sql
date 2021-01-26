@@ -20,8 +20,8 @@ CREATE TABLE IF NOT EXISTS events (
   tag VARCHAR,                                   -- タグ（樫原伸彦、デジハリ、ベトナム等）
   fee INTEGER,                                   -- イベントチャージ（入場料。未入力の場合は通常のBARのチャージ）
   ogp_img VARCHAR,                               -- アイキャッチ画像
-  start_time TIMESTAMP,                          -- イベント開始日時
-  end_time TIMESTAMP,                            -- イベント終了日時
+  start_at TIMESTAMP,                          -- イベント開始日時
+  end_at TIMESTAMP,                            -- イベント終了日時
   publish_at TIMESTAMP,                          -- 公開開始日時
   updated_at TIMESTAMP,                          -- 更新日時
   page_view INTEGER NOT NULL DEFAULT 0,          -- PV

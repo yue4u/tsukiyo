@@ -31,8 +31,8 @@ table! {
         tag -> Nullable<Varchar>,
         fee -> Nullable<Int4>,
         ogp_img -> Nullable<Varchar>,
-        start_time -> Nullable<Timestamp>,
-        end_time -> Nullable<Timestamp>,
+        start_at -> Nullable<Timestamp>,
+        end_at -> Nullable<Timestamp>,
         publish_at -> Nullable<Timestamp>,
         updated_at -> Nullable<Timestamp>,
         page_view -> Int4,
@@ -45,8 +45,4 @@ table! {
 
 joinable!(events -> admins (creator_id));
 
-allow_tables_to_appear_in_same_query!(
-    admins,
-    contacts,
-    events,
-);
+allow_tables_to_appear_in_same_query!(admins, contacts, events,);

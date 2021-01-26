@@ -1,166 +1,296 @@
 <template>
-  <h1>create new event</h1>
-  <form class="form" @submit.prevent="submit">
-    <label for="title">title</label>
-    <input autocomplete="off" id="title" v-model="title" />
-    <label for="slug">slug</label>
-    <input autocomplete="off" id="slug" v-model="slug" />
-    <label for="genre">genre</label>
-    <input autocomplete="off" id="genre" v-model="genre" />
-    <label for="tag">tag</label>
-    <input autocomplete="off" id="tag" v-model="tag" />
-    <label for="fee">fee</label>
-    <input autocomplete="off" id="fee" v-model="fee" />
-    <label for="ogpImg">ogpImg</label>
-    <input autocomplete="off" id="ogpImg" v-model="ogpImg" />
-    <label for="startTime">startTime</label>
-    <input autocomplete="off" id="startTime" v-model="startTime" type="date" />
-    <label for="endTime">endTime</label>
-    <input autocomplete="off" id="endTime" v-model="endTime" type="date" />
-    <label for="published">published</label>
+  <h1 v-if="fetching">fetching..</h1>
+  <form
+    v-else-if="isCreate || data?.event"
+    class="form grid grid-cols-4 gap-2 text-lg"
+    @submit.prevent="submit"
+  >
+    <Label class="w-10" for="title">title</Label>
     <input
+      id="title"
+      v-model="form.event.title"
+      :class="inputClass"
       autocomplete="off"
-      type="checkbox"
-      id="published"
-      v-model="published"
+      placeholder="title"
     />
-    <label for="memo">memo</label>
-    <input autocomplete="off" id="memo" v-model="memo" />
-    <div class="view" v-html="markdown" />
-    <textarea v-model="body" />
-    <button class="create full" type="submit">create</button>
+    <Label class="w-10" for="slug">slug</Label>
+    <input
+      id="slug"
+      v-model="form.event.slug"
+      :class="inputClass"
+      autocomplete="off"
+      placeholder="/slug"
+    />
+    <Label class="w-10" for="genre">genre</Label>
+    <input
+      id="genre"
+      v-model="form.event.genre"
+      :class="inputClass"
+      autocomplete="off"
+      placeholder="genre"
+    />
+    <Label class="w-10" for="tag">tag</Label>
+    <input
+      id="tag"
+      v-model="form.event.tag"
+      :class="inputClass"
+      autocomplete="off"
+      placeholder="tag"
+    />
+    <Label class="w-10" for="fee">fee</Label>
+    <input id="fee" v-model="form.event.fee" :class="inputClass" autocomplete="off" placeholder="0" />
+    <Label class="w-10" for="ogpImg">ogpImg</Label>
+    <input id="ogpImg" :class="inputClass" autocomplete="off" type="file" />
+    <Label class="w-10" for="startAt">startAt</Label>
+    <input
+      id="startAt"
+      v-model="form.event.startAt"
+      :class="inputClass"
+      autocomplete="off"
+      type="date"
+    />
+    <Label class="w-10" for="endAt">endAt</Label>
+    <input id="endAt" v-model="form.event.endAt" :class="inputClass" autocomplete="off" type="date" />
+    <Label class="w-10" for="published">published</Label>
+    <input
+      id="published"
+      v-model="form.event.published"
+      :class="inputClass"
+      class="w-min mx-5"
+      type="checkbox"
+    />
+    <Label class="w-10 col-start-1" for="memo">memo</Label>
+    <textarea
+      id="memo"
+      v-model="form.event.memo"
+      class="memo col-span-3 h-36 border-b mx-5 focus:border-black outline-none resize-none"
+      placeholder="random memo"
+    />
+    <textarea
+      v-model="form.event.body"
+      class="col-span-2 h-48 border-b mx-5 focus:border-black outline-none resize-none"
+    />
+    <div class="view col-span-2" v-html="markdown" />
+    <div class="flex col-span-4 justify-between my-10 gap-2">
+      <button
+        class="w-full rounded-md bg-gray-100 hover:bg-gray-200 py-2"
+        @click.prevent="returnToList"
+      >return</button>
+
+      <button
+        class="w-full rounded-md bg-green-300 hover:bg-green-400 py-2"
+        type="submit"
+      >{{ isCreate ? "create" : "update" }}</button>
+      <button
+        v-if="!isCreate"
+        class="border-2 w-full rounded-md border-red-200 text-red-400 hover:border-red-500 hover:bg-red-500 hover:text-white py-2"
+        @click.prevent="deleteEvent()"
+      >delete</button>
+    </div>
   </form>
-  <div class="info" v-if="state.data">{{ state.data }}</div>
-  <div class="info error" v-if="state.error">{{ state.error }}</div>
+  <div v-if="state.data" class>{{ state.data }}</div>
+  <div v-if="state.error" class="text-red-500">{{ state.error }}</div>
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, computed } from "vue";
+import { watch, reactive, computed, toRaw } from "vue";
+import type { Event, EventInput, EventUpdate } from "@/type/gql";
+import Label from "./EditorLabel.vue";
 // @ts-ignore
 import marked from "@/node_modules/marked/lib/marked.esm.js";
-import { useMutation, CombinedError } from "@urql/vue";
+import { useQuery, useMutation } from "@urql/vue";
+import { useRouter } from "vue-router";
+import { maybeTimestamp, maybeDateString } from '@/utils'
 
+const inputClass =
+  "border-grey-300 border-b mx-5 focus:border-black outline-none";
+const router = useRouter();
+const { id } = router.currentRoute.value.query;
+
+const isCreate = computed(() => !router.currentRoute.value.query.id);
 const [now] = new Date().toISOString().split("T");
-const slug = ref("");
-const title = ref("");
-const body = ref("# new event");
-const genre = ref("genre");
-const tag = ref("");
-const fee = ref(0);
-const ogpImg = ref("");
-const startTime = ref(now);
-const endTime = ref(now);
-const published = ref(false);
-const memo = ref("");
 
-const markdown = computed(() => {
-  return marked(body.value, { sanitize: true });
+const returnToList = () => {
+  router.push("/admin/event-list");
+};
+
+type EventForm = {
+  event: Omit<EventInput, 'startAt' | 'endAt'> & {
+    startAt?: string | null, endAt?: string | null,
+  }
+}
+
+const form = reactive<EventForm>({
+  event: {
+    slug: undefined,
+    title: "",
+    body: "# new event",
+    genre: "genre",
+    tag: undefined,
+    fee: 0,
+    ogpImg: undefined,
+    startAt: now,
+    endAt: now,
+    published: false,
+    memo: undefined,
+  },
 });
 
-const state = reactive({
+const { fetching, data } = useQuery<{ event: Event }>({
+  query: `
+    query ($id: Int!) {
+      event(id: $id) {
+         title
+         body
+         ogpImg
+         startAt
+         endAt
+         publishAt
+         updatedAt
+         pageView
+         createdAt
+         published
+       }
+    }`,
+  variables: { id: +id! },
+  pause: isCreate,
+  requestPolicy: "cache-and-network",
+});
+
+watch(
+  () => data?.value,
+  () => {
+    if (!data.value?.event) {
+      return
+    }
+    form.event = {
+      ...form.event,
+      ...data.value.event,
+      startAt: maybeDateString(data.value.event.startAt),
+      endAt: maybeDateString(data.value.event.endAt)
+    };
+  }
+);
+
+const markdown = computed(() => {
+  return marked(form.event.body, { sanitize: true });
+});
+
+const state = reactive<{
+  data: any;
+  error: string | undefined;
+}>({
   data: undefined,
-  error: undefined as string | undefined,
+  error: undefined,
 });
 
 const submit = async () => {
-  // TODO: fix this
-  const { data, error } = await createEvent({
-    slug: slug.value || undefined,
-    title: title.value || undefined,
-    body: body.value || undefined,
-    genre: genre.value || undefined,
-    tag: tag.value || undefined,
-    fee: fee.value || undefined,
-    ogpImg: ogpImg.value || undefined,
-    startTime: +new Date(startTime.value),
-    endTime: +new Date(endTime.value),
-    published: published.value,
-    memo: memo.value || undefined,
-  });
+  const action = async () => {
+    const input: EventInput | EventUpdate = {
+      ...toRaw(form.event),
+      startAt: maybeTimestamp(form.event.startAt),
+      endAt: maybeTimestamp(form.event.endAt),
+    };
+    if (isCreate.value) {
+      return createEvent(input);
+    } else {
+      return updateEvent({ id: +id!, ...input });
+    }
+  };
+  const { data, error } = await action();
   state.data = data;
   state.error = error?.message;
+  if (error) {
+    return;
+  }
+  returnToList();
 };
 
 const { executeMutation: createEvent } = useMutation(`
   mutation (
-    $slug: String, 
-    $title: String!, 
-    $body: String!, 
-    $genre: String, 
-    $tag: String, 
-    $fee: Int, 
-    $ogpImg: String, 
-    $startTime: NaiveDateTime, 
-    $endTime: NaiveDateTime, 
-    $published: Boolean, 
+    $slug: String,
+    $title: String!,
+    $body: String!,
+    $genre: String,
+    $tag: String,
+    $fee: Int,
+    $ogpImg: String,
+    $startAt: NaiveDateTime,
+    $endAt: NaiveDateTime,
+    $published: Boolean,
     $memo: String
   ){
       createEvent(
         event: {
-          slug: $slug, 
-          title: $title, 
-          body: $body, 
-          genre: $genre, 
-          tag: $tag, 
-          fee: $fee, 
-          ogpImg: $ogpImg, 
-          startTime: $startTime, 
-          endTime: $endTime, 
-          published: $published, 
+          slug: $slug,
+          title: $title,
+          body: $body,
+          genre: $genre,
+          tag: $tag,
+          fee: $fee,
+          ogpImg: $ogpImg,
+          startAt: $startAt,
+          endAt: $endAt,
+          published: $published,
           memo: $memo
     }) {
       id
     }
   }
 `);
+
+const { executeMutation: updateEvent } = useMutation(`
+  mutation (
+    $id: Int!,
+    $slug: String,
+    $title: String!,
+    $body: String!,
+    $genre: String,
+    $tag: String,
+    $fee: Int,
+    $ogpImg: String,
+    $startAt: NaiveDateTime,
+    $endAt: NaiveDateTime,
+    $published: Boolean,
+    $memo: String
+  ){
+      updateEvent(
+        id: $id,
+        update: {
+          slug: $slug,
+          title: $title,
+          body: $body,
+          genre: $genre,
+          tag: $tag,
+          fee: $fee,
+          ogpImg: $ogpImg,
+          startAt: $startAt,
+          endAt: $endAt,
+          published: $published,
+          memo: $memo
+    }) {
+      id
+    }
+  }
+`);
+
+const { executeMutation: deleteEventMutation } = useMutation(`
+  mutation ($id: Int!) {
+    deleteEvent(id: $id) {
+      id
+    }
+  }
+`);
+
+const deleteEvent = () => {
+  deleteEventMutation({ id: +id! });
+  returnToList();
+};
 </script>
 
 <style lang="scss" scoped>
 @import "../assets/base.scss";
-
 .form {
-  margin: 0 auto;
-  max-width: 1000px;
-  display: grid;
-  gap: 1rem;
-  grid-template-columns: 1fr 1fr;
-}
-.create {
-  outline: none;
-  appearance: none;
-  border: 0;
-  padding: 1rem;
-  cursor: pointer;
-}
-
-label {
-  font-weight: bold;
-}
-input,
-label {
-  place-content: center;
-  padding: 5px;
-  font-size: 1rem;
-}
-
-input {
-  border: 0;
-  outline: none;
-  appearance: none;
-  border-bottom: 1px solid #ccc;
-}
-.info {
-  margin: 1rem;
-}
-.error {
-  color: red;
-}
-.view {
-  word-break: break-all;
-}
-textarea {
-  border: 0;
-  background: #eee;
-  padding: 5px;
+  grid-template-columns: 8rem 1fr 8rem 1fr;
 }
 </style>
