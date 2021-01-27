@@ -20,12 +20,30 @@
       肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ
     </div>
   </div>
-  <div>1</div>
+  <div class="flex p-16 recommend">
+    <recommend-item
+      imgPath="/assets/DSC08493.jpeg"
+      title="Title"
+      text="testtesttest"
+    />
+    <recommend-item
+      imgPath="/assets/DSC08493.jpeg"
+      title="Title"
+      text="testtesttest"
+    />
+    <recommend-item
+      imgPath="/assets/DSC08493.jpeg"
+      title="Title"
+      text="testtesttest"
+    />
+  </div>
 </template>
 
 <script setup lang="ts">
 // @ts-ignore
 import SectionTitle from "./SectionTitle.vue";
+// @ts-ignore
+import RecommendItem from "./RecommendItem.vue";
 </script>
 
 <style scoped>
@@ -55,5 +73,8 @@ import SectionTitle from "./SectionTitle.vue";
 }
 .right::after {
   top: -30px;
+}
+.recommend {
+  border: 1px solid #fff;
 }
 </style>

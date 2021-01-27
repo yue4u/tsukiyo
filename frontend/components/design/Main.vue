@@ -4,7 +4,11 @@
     <div class="container mx-auto">
       <Sentence />
       <Menu />
+      <Event />
     </div>
+  </div>
+  <div class="container mx-auto">
+    <Access />
   </div>
 </template>
 
@@ -15,6 +19,10 @@ import MainVisual from "./MainVisual.vue";
 import Sentence from "./Sentence.vue";
 // @ts-ignore
 import Menu from "./Menu.vue";
+// @ts-ignore
+import Event from "./Event.vue";
+// @ts-ignore
+import Access from "./Access.vue";
 </script>
 
 <style scoped>
