@@ -68,12 +68,7 @@
       @change="handleFileChange"
     />
 
-    <img
-      v-if="form.event.ogpImg"
-      class="col-span-2"
-      :src="`https://${VITE_PUBLIC_BUCKET}/ogp/${form.event.ogpImg}`"
-    />
-
+    <img v-if="ogpURL" class="col-span-2" :src="ogpURL" />
     <Label class="w-10 col-start-1" for="memo">memo</Label>
     <textarea
       id="memo"
@@ -156,18 +151,21 @@ const form = reactive<EventForm>({
 
 
 const disbaled = ref(false);
+const ogpLocal = ref<File | null>(null);
+const ogpLocalURL = ref<string | null>(null);
+
+watch(() => ogpLocal.value, async () => {
+  if (!ogpLocal.value) return "";
+  const arrayBuffer = await ogpLocal.value.arrayBuffer();
+  const blob = new Blob([arrayBuffer]);
+  ogpLocalURL.value = URL.createObjectURL(blob);
+});
 
 // TODO: fix this type
 const handleFileChange = async (payload: any) => {
   if (!payload.target.files.length) return
   const file = (payload.target.files as FileList)[0];
-  disbaled.value = true;
-  form.event.ogpImg = await OGP.upload(file)
-  if (id) {
-    // TODO: move this when acctually click upload button
-    await updateEvent({ id: +id, ogpImg: form.event.ogpImg })
-  }
-  disbaled.value = false;
+  ogpLocal.value = file;
 }
 
 
@@ -207,6 +205,16 @@ watch(
   }
 );
 
+const ogpURL = computed(() => {
+  if (form.event.ogpImg) {
+    return `https://${VITE_PUBLIC_BUCKET}/ogp/${form.event.ogpImg}`
+  }
+  if (ogpLocalURL.value) {
+    return ogpLocalURL.value
+  }
+  return undefined
+})
+
 const markdown = computed(() => {
   return marked(form.event.body, { sanitize: true });
 });
@@ -221,6 +229,9 @@ const state = reactive<{
 
 const submit = async () => {
   const action = async () => {
+    if (ogpLocal.value) {
+      form.event.ogpImg = await OGP.upload(ogpLocal.value)
+    }
     const input: EventInput | EventUpdate = {
       ...toRaw(form.event),
       startAt: maybeTimestamp(form.event.startAt),
@@ -236,6 +247,9 @@ const submit = async () => {
   state.data = data;
   state.error = error?.message;
   if (error) {
+    if (form.event.ogpImg) {
+      OGP.delete(form.event.ogpImg)
+    }
     return;
   }
   returnToList();
