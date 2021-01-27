@@ -3,6 +3,7 @@ import { ref } from "vue";
 import "firebase/auth";
 import { authExchange as createAuthExchange } from "@urql/exchange-auth";
 import { makeOperation } from "@urql/vue";
+import router from "@/router";
 
 const { VITE_API_KEY, VITE_AUTH_DOMAIN } = import.meta.env;
 
@@ -21,7 +22,8 @@ app.auth().onAuthStateChanged((maybeUser) => {
 
 export async function logout() {
   currentUser.value = null;
-  return firebase.auth().signOut();
+  await firebase.auth().signOut();
+  router.push("/admin/login");
 }
 /**
  * we need this to check auth before handle gql api

@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
+import { currentUser, waitForAuth } from "@/utils/auth";
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -42,6 +43,19 @@ const routes: Array<RouteRecordRaw> = [
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
+});
+
+router.beforeEach(async (to, _from, next) => {
+  if (to.fullPath.startsWith("/admin") && to.name !== "Login") {
+    const user = currentUser.value ?? (await waitForAuth());
+    if (!user) {
+      next({ name: "Login" });
+      return;
+    }
+    next();
+    return;
+  }
+  next();
 });
 
 export default router;
