@@ -28,7 +28,7 @@ pub(crate) async fn graphql(
         data.execute(&schema.public, &ctx).await
     };
 
-    serde_json::to_string(&res).expect("failed to get data")
+    serde_json::to_string(&res)
 }
 
 #[cfg(debug_assertions)]

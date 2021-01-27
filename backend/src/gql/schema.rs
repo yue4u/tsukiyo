@@ -82,6 +82,12 @@ impl MutationAdmin {
         let contact = contacts::delete(ctx, id)?;
         Ok(contact)
     }
+
+    #[cfg(debug_assertions)]
+    fn create_contact(ctx: &Context, contact: ContactInput) -> FieldResult<Contact> {
+        let contact = contacts::create(ctx, contact)?;
+        Ok(contact)
+    }
 }
 
 pub type SchemaAdmin = RootNode<'static, QueryAdmin, MutationAdmin, EmptySubscription<Context>>;
@@ -113,7 +119,7 @@ pub struct MutationPublic;
     context = Context,
 )]
 impl MutationPublic {
-    fn create_contact(ctx: &Context, contact: ContactInput) -> FieldResult<Contact> {
+    async fn create_contact(ctx: &Context, contact: ContactInput) -> FieldResult<Contact> {
         let contact = contacts::create(ctx, contact)?;
         Ok(contact)
     }

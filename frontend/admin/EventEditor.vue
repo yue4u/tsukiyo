@@ -110,13 +110,11 @@ import Label from "./EditorLabel.vue";
 import marked from "@/node_modules/marked/lib/marked.esm.js";
 import { useQuery, useMutation } from "@urql/vue";
 import { useRouter } from "vue-router";
-import { maybeTimestamp, maybeDateString } from '@/utils'
+import { inputClass, maybeTimestamp, maybeDateString } from '@/utils'
 import { OGP } from '@/utils/stroage'
 
 const { VITE_PUBLIC_BUCKET_NAME } = import.meta.env;
 
-const inputClass =
-  "border-grey-300 border-b mx-5 focus:border-black outline-none";
 const router = useRouter();
 const { id } = router.currentRoute.value.query;
 

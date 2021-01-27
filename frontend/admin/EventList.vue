@@ -3,7 +3,7 @@
   <div v-else-if="error">Oh no... {{ error }}</div>
   <div v-else>
     <div v-if="!data?.events?.length">There is no events</div>
-    <p v-else class="text-left text-lg mb-5">There is {{ data.events.length }} events</p>
+    <AdminViewTitle v-else class="text-left text-lg mb-5">There is {{ data.events.length }} events</AdminViewTitle>
 
     <ul v-if="data" class="grid gap-y-5">
       <li v-for="event in data.events" :key="event.id">
@@ -30,6 +30,7 @@
 import { useQuery } from "@urql/vue";
 import type { Event } from "@/type/gql";
 import { dateTime } from "@/utils";
+import AdminViewTitle from './AdminViewTitle.vue'
 
 const { fetching, data, error } = useQuery<{ events: Event[] }>({
   query: `
