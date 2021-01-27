@@ -36,3 +36,6 @@ export const maybeDateString = (maybeDateString?: number | null) => {
     return undefined;
   }
 };
+
+export const inputClass =
+  "border-grey-300 border-b mx-5 focus:border-black outline-none";

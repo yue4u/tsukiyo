@@ -1,5 +1,5 @@
-use crate::sql::schema::contacts;
 use crate::utils::not_empty;
+use crate::{sql::schema::contacts, utils::SlackWebHookPayload};
 use chrono::prelude::NaiveDateTime;
 use juniper::{GraphQLInputObject, GraphQLObject};
 use serde::{Deserialize, Serialize};
@@ -19,7 +19,9 @@ pub struct Contact {
     pub checked: bool,
 }
 
-#[derive(Debug, Default, Validate, Insertable, Serialize, Deserialize, GraphQLInputObject)]
+#[derive(
+    Debug, Default, Clone, Validate, Insertable, Serialize, Deserialize, GraphQLInputObject,
+)]
 #[graphql(description = "A new contact input")]
 #[table_name = "contacts"]
 pub struct ContactInput {
@@ -44,4 +46,26 @@ pub struct ContactUpdate {
 pub struct ContactQuery {
     pub search_string: Option<String>,
     pub checked: Option<bool>,
+}
+
+impl ContactInput {
+    pub fn to_notify_message(self) -> SlackWebHookPayload {
+        SlackWebHookPayload::new(format!(
+            "*New Contact*
+`title:` {}
+`name:` {}
+`email:` {}
+`phone:` {}
+
+```
+{}
+```
+",
+            self.title,
+            self.name,
+            self.email,
+            self.phone.unwrap_or("".to_string()),
+            self.body,
+        ))
+    }
 }

@@ -11,6 +11,14 @@ pub fn get(ctx: &Context, contact_id: i32) -> anyhow::Result<Contact> {
 
 pub fn create(ctx: &Context, contact: ContactInput) -> anyhow::Result<Contact> {
     contact.validate()?;
+    let notify = contact.clone().to_notify_message();
+    actix_rt::spawn(async move {
+        actix_web::client::Client::default()
+            .post(std::env::var("CONTACT_WEB_HOOK").unwrap())
+            .send_json(&notify)
+            .await
+            .unwrap();
+    });
     let conn = ctx.pool.get()?;
     Ok(diesel::insert_into(contacts::table)
         .values(&contact)

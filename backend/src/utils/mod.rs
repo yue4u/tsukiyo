@@ -1,3 +1,4 @@
+use serde_derive::Serialize;
 use std::fmt;
 use validator::ValidationError;
 #[derive(Debug)]
@@ -39,4 +40,16 @@ pub fn not_empty(input: &str) -> Result<(), ValidationError> {
         return Err(ValidationError::new("should not be empty"));
     }
     Ok(())
+}
+
+#[derive(Serialize)]
+pub struct SlackWebHookPayload {
+    pub text: String,
+    mrkdwn: bool,
+}
+
+impl SlackWebHookPayload {
+    pub fn new(text: String) -> Self {
+        Self { text, mrkdwn: true }
+    }
 }

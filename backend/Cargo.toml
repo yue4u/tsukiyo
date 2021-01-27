@@ -11,6 +11,7 @@ edition = "2018"
 anyhow = "1.0"
 actix-web = { version = "3", features = ["rustls"] }
 actix-cors = "0.5"
+actix-rt = "1.1.1"
 chrono = { version = "0.4", features = ["serde"] }
 diesel = { version = "1.4.4", features = ["postgres","r2d2", "chrono"] }
 serde = "1.0.119"
