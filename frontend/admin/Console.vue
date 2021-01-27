@@ -23,6 +23,7 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
 import { useRoute } from "vue-router";
 import Logo from "@/components/Logo.vue";
 
@@ -30,7 +31,7 @@ import Logo from "@/components/Logo.vue";
 import AdminNav from "@/admin/AdminNav.vue";
 import { currentUser, logout } from "@/utils/auth";
 
-const isLogin = useRoute().name == "Login";
+const isLogin = computed(() => useRoute().name == "Login");
 </script>
 
 <style lang="scss" scoped>
