@@ -4,7 +4,9 @@ import path from "path";
 
 export default defineConfig({
   plugins: [vue()],
-  optimizeDeps: { include: ["firebase/app", "firebase/auth"] },
+  optimizeDeps: {
+    include: ["firebase/app", "firebase/auth", "firebase/storage"],
+  },
   alias: {
     "@": path.resolve(__dirname, "."),
   },

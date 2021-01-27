@@ -1,6 +1,7 @@
 import firebase from "firebase/app";
 import { ref } from "vue";
 import "firebase/auth";
+import "firebase/storage";
 import { authExchange as createAuthExchange } from "@urql/exchange-auth";
 import { makeOperation } from "@urql/vue";
 import router from "@/router";
