@@ -21,7 +21,10 @@ pub struct Context {
 async fn main() -> std::io::Result<()> {
     openssl_probe::init_ssl_cert_env_vars();
     let pool = sql::db::create_pool();
-
+    println!(
+        "starting on {}",
+        std::env::var("PORT").unwrap_or("4000".to_string())
+    );
     HttpServer::new(move || {
         #[cfg(debug_assertions)]
         let cors = Cors::default()
@@ -50,7 +53,10 @@ async fn main() -> std::io::Result<()> {
             .route("/ping", web::get().to(pong))
             .configure(gql::controller::register)
     })
-    .bind("0.0.0.0:4000")?
+    .bind(format!(
+        "0.0.0.0:{}",
+        std::env::var("PORT").unwrap_or("4000".to_string())
+    ))?
     .run()
     .await
 }
