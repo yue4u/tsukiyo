@@ -39,9 +39,7 @@
     />
     <Label class="w-10" for="fee">fee</Label>
     <input id="fee" v-model="form.event.fee" :class="inputClass" autocomplete="off" placeholder="0" />
-    <Label class="w-10" for="ogpImg">ogpImg</Label>
-    <input id="ogpImg" :class="inputClass" autocomplete="off" type="file" />
-    <Label class="w-10" for="startAt">startAt</Label>
+    <Label class="w-10 col-start-1" for="startAt">startAt</Label>
     <input
       id="startAt"
       v-model="form.event.startAt"
@@ -59,6 +57,18 @@
       class="w-min mx-5"
       type="checkbox"
     />
+
+    <Label class="w-10 col-start-1" for="ogpImg">ogpImg</Label>
+    <input
+      id="ogpImg"
+      :class="inputClass"
+      autocomplete="off"
+      type="file"
+      :disabled="disbaled"
+      @change="handleFileChange"
+    />
+
+    <img v-if="ogpURL" class="col-span-2" :src="ogpURL" />
     <Label class="w-10 col-start-1" for="memo">memo</Label>
     <textarea
       id="memo"
@@ -93,7 +103,7 @@
 </template>
 
 <script setup lang="ts">
-import { watch, reactive, computed, toRaw } from "vue";
+import { watch, ref, reactive, computed, toRaw } from "vue";
 import type { Event, EventInput, EventUpdate } from "@/type/gql";
 import Label from "./EditorLabel.vue";
 // @ts-ignore
@@ -101,6 +111,9 @@ import marked from "@/node_modules/marked/lib/marked.esm.js";
 import { useQuery, useMutation } from "@urql/vue";
 import { useRouter } from "vue-router";
 import { maybeTimestamp, maybeDateString } from '@/utils'
+import { OGP } from '@/utils/stroage'
+
+const { VITE_PUBLIC_BUCKET } = import.meta.env;
 
 const inputClass =
   "border-grey-300 border-b mx-5 focus:border-black outline-none";
@@ -135,6 +148,26 @@ const form = reactive<EventForm>({
     memo: undefined,
   },
 });
+
+
+const disbaled = ref(false);
+const ogpLocal = ref<File | null>(null);
+const ogpLocalURL = ref<string | null>(null);
+
+watch(() => ogpLocal.value, async () => {
+  if (!ogpLocal.value) return "";
+  const arrayBuffer = await ogpLocal.value.arrayBuffer();
+  const blob = new Blob([arrayBuffer]);
+  ogpLocalURL.value = URL.createObjectURL(blob);
+});
+
+// TODO: fix this type
+const handleFileChange = async (payload: any) => {
+  if (!payload.target.files.length) return
+  const file = (payload.target.files as FileList)[0];
+  ogpLocal.value = file;
+}
+
 
 const { fetching, data } = useQuery<{ event: Event }>({
   query: `
@@ -172,6 +205,16 @@ watch(
   }
 );
 
+const ogpURL = computed(() => {
+  if (form.event.ogpImg) {
+    return `https://${VITE_PUBLIC_BUCKET}/ogp/${form.event.ogpImg}`
+  }
+  if (ogpLocalURL.value) {
+    return ogpLocalURL.value
+  }
+  return undefined
+})
+
 const markdown = computed(() => {
   return marked(form.event.body, { sanitize: true });
 });
@@ -186,6 +229,9 @@ const state = reactive<{
 
 const submit = async () => {
   const action = async () => {
+    if (ogpLocal.value) {
+      form.event.ogpImg = await OGP.upload(ogpLocal.value)
+    }
     const input: EventInput | EventUpdate = {
       ...toRaw(form.event),
       startAt: maybeTimestamp(form.event.startAt),
@@ -201,6 +247,9 @@ const submit = async () => {
   state.data = data;
   state.error = error?.message;
   if (error) {
+    if (form.event.ogpImg) {
+      OGP.delete(form.event.ogpImg)
+    }
     return;
   }
   returnToList();
@@ -243,8 +292,8 @@ const { executeMutation: updateEvent } = useMutation(`
   mutation (
     $id: Int!,
     $slug: String,
-    $title: String!,
-    $body: String!,
+    $title: String,
+    $body: String,
     $genre: String,
     $tag: String,
     $fee: Int,
@@ -282,8 +331,11 @@ const { executeMutation: deleteEventMutation } = useMutation(`
   }
 `);
 
-const deleteEvent = () => {
+const deleteEvent = async () => {
   deleteEventMutation({ id: +id! });
+  if (form.event.ogpImg) {
+    await OGP.delete(form.event.ogpImg);
+  }
   returnToList();
 };
 </script>
