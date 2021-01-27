@@ -15,7 +15,7 @@ export type Scalars = {
   Int: number;
   Float: number;
   /** NaiveDateTime */
-  NaiveDateTime: number;
+  NaiveDateTime: any;
 };
 
 /** Event data including admin info */
@@ -66,11 +66,9 @@ export type ContactQuery = {
   checked?: Maybe<Scalars["Boolean"]>;
 };
 
-export type EventQuery = {
-  genre?: Maybe<Scalars["String"]>;
-  tag?: Maybe<Scalars["String"]>;
-  published?: Maybe<Scalars["Boolean"]>;
-  limit?: Maybe<Scalars["Int"]>;
+export type EventQueryPublic = {
+  id?: Maybe<Scalars["Int"]>;
+  slug?: Maybe<Scalars["String"]>;
 };
 
 /** A new contact */
@@ -83,6 +81,47 @@ export type Contact = {
   body: Scalars["String"];
   createdAt: Scalars["NaiveDateTime"];
   checked: Scalars["Boolean"];
+};
+
+export type EventListQuery = {
+  genre?: Maybe<Scalars["String"]>;
+  tag?: Maybe<Scalars["String"]>;
+  published?: Maybe<Scalars["Boolean"]>;
+  limit?: Maybe<Scalars["Int"]>;
+};
+
+export type QueryAdmin = {
+  apiVersion: Scalars["String"];
+  me?: Maybe<User>;
+  event: Event;
+  eventPublic: EventPublic;
+  events: Array<Event>;
+  contact: Contact;
+  contacts: Array<Contact>;
+};
+
+export type QueryAdminEventArgs = {
+  query: EventQueryPublic;
+};
+
+export type QueryAdminEventPublicArgs = {
+  id: Scalars["Int"];
+};
+
+export type QueryAdminEventsArgs = {
+  by?: Maybe<EventListQuery>;
+};
+
+export type QueryAdminContactArgs = {
+  id: Scalars["Int"];
+};
+
+export type QueryAdminContactsArgs = {
+  by?: Maybe<ContactQuery>;
+};
+
+export type User = {
+  uid: Scalars["String"];
 };
 
 /** Event input for creating event */
@@ -99,35 +138,6 @@ export type EventInput = {
   creatorId?: Maybe<Scalars["Int"]>;
   published?: Maybe<Scalars["Boolean"]>;
   memo?: Maybe<Scalars["String"]>;
-};
-
-export type QueryAdmin = {
-  apiVersion: Scalars["String"];
-  me?: Maybe<User>;
-  event: Event;
-  events: Array<Event>;
-  contact: Contact;
-  contacts: Array<Contact>;
-};
-
-export type QueryAdminEventArgs = {
-  id: Scalars["Int"];
-};
-
-export type QueryAdminEventsArgs = {
-  by?: Maybe<EventQuery>;
-};
-
-export type QueryAdminContactArgs = {
-  id: Scalars["Int"];
-};
-
-export type QueryAdminContactsArgs = {
-  by?: Maybe<ContactQuery>;
-};
-
-export type User = {
-  uid: Scalars["String"];
 };
 
 export type MutationAdmin = {
@@ -158,4 +168,21 @@ export type MutationAdminUpdateContactArgs = {
 
 export type MutationAdminDeleteContactArgs = {
   id: Scalars["Int"];
+};
+
+/** Event data which is ok to be public */
+export type EventPublic = {
+  id: Scalars["Int"];
+  slug?: Maybe<Scalars["String"]>;
+  title: Scalars["String"];
+  body: Scalars["String"];
+  genre?: Maybe<Scalars["String"]>;
+  tag?: Maybe<Scalars["String"]>;
+  fee?: Maybe<Scalars["Int"]>;
+  ogpImg?: Maybe<Scalars["String"]>;
+  startAt?: Maybe<Scalars["NaiveDateTime"]>;
+  endAt?: Maybe<Scalars["NaiveDateTime"]>;
+  publishAt?: Maybe<Scalars["NaiveDateTime"]>;
+  updatedAt?: Maybe<Scalars["NaiveDateTime"]>;
+  pageView: Scalars["Int"];
 };

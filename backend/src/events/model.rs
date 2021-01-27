@@ -101,7 +101,13 @@ pub struct EventUpdate {
 }
 
 #[derive(Debug, Default, Serialize, Deserialize, GraphQLInputObject)]
-pub struct EventQuery {
+pub struct EventQueryPublic {
+    pub id: Option<i32>,
+    pub slug: Option<String>,
+}
+
+#[derive(Debug, Default, Serialize, Deserialize, GraphQLInputObject)]
+pub struct EventListQuery {
     pub genre: Option<String>,
     pub tag: Option<String>,
     pub published: Option<bool>,

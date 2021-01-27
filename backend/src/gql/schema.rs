@@ -1,10 +1,10 @@
 use crate::{
     auth::User,
     contacts::{self, Contact, ContactInput, ContactQuery, ContactUpdate},
-    events::{self, Event, EventInput, EventQuery, EventUpdate},
+    events::{self, Event, EventInput, EventListQuery, EventUpdate},
     Context,
 };
-use events::EventPublic;
+use events::{EventPublic, EventQueryPublic};
 use juniper::{graphql_object, EmptySubscription, FieldResult, RootNode};
 
 impl juniper::Context for Context {}
@@ -25,18 +25,18 @@ impl QueryAdmin {
         Ok(ctx.user.clone())
     }
 
-    fn event(ctx: &Context, id: i32) -> FieldResult<Event> {
-        let event = events::service::get(ctx, id)?;
+    fn event(ctx: &Context, query: EventQueryPublic) -> FieldResult<Event> {
+        let event = events::service::get(ctx, query)?;
         Ok(event)
     }
 
     #[cfg(debug_assertions)]
-    fn event_public(ctx: &Context, id: i32) -> FieldResult<EventPublic> {
-        let event = events::service::get_public(ctx, id)?;
+    fn event_public(ctx: &Context, query: EventQueryPublic) -> FieldResult<EventPublic> {
+        let event = events::service::get_public(ctx, query)?;
         Ok(event)
     }
 
-    fn events(ctx: &Context, by: Option<EventQuery>) -> FieldResult<Vec<Event>> {
+    fn events(ctx: &Context, by: Option<EventListQuery>) -> FieldResult<Vec<Event>> {
         let events = events::service::list(ctx, by)?;
         Ok(events)
     }
@@ -96,12 +96,12 @@ impl QueryPublic {
         API_VERSION
     }
 
-    fn event(ctx: &Context, id: i32) -> FieldResult<EventPublic> {
-        let event = events::service::get_public(ctx, id)?;
+    fn event(ctx: &Context, query: EventQueryPublic) -> FieldResult<EventPublic> {
+        let event = events::service::get_public(ctx, query)?;
         Ok(event)
     }
 
-    fn events(ctx: &Context, by: Option<EventQuery>) -> FieldResult<Vec<EventPublic>> {
+    fn events(ctx: &Context, by: Option<EventListQuery>) -> FieldResult<Vec<EventPublic>> {
         let events = events::service::list_public(ctx, by)?;
         Ok(events)
     }

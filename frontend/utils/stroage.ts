@@ -4,7 +4,7 @@ import { v4 } from "uuid";
 
 export const ogpStorage = firebase
   .app()
-  .storage(("gs://" + import.meta.env.VITE_PUBLIC_BUCKET) as string)
+  .storage(("gs://" + import.meta.env.VITE_PUBLIC_BUCKET_NAME) as string)
   .ref()
   .child("ogp");
 

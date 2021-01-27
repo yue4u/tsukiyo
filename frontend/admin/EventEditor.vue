@@ -19,7 +19,7 @@
       v-model="form.event.slug"
       :class="inputClass"
       autocomplete="off"
-      placeholder="/slug"
+      placeholder="some-event-slug"
     />
     <Label class="w-10" for="genre">genre</Label>
     <input
@@ -113,7 +113,7 @@ import { useRouter } from "vue-router";
 import { maybeTimestamp, maybeDateString } from '@/utils'
 import { OGP } from '@/utils/stroage'
 
-const { VITE_PUBLIC_BUCKET } = import.meta.env;
+const { VITE_PUBLIC_BUCKET_NAME } = import.meta.env;
 
 const inputClass =
   "border-grey-300 border-b mx-5 focus:border-black outline-none";
@@ -172,7 +172,7 @@ const handleFileChange = async (payload: any) => {
 const { fetching, data } = useQuery<{ event: Event }>({
   query: `
     query ($id: Int!) {
-      event(id: $id) {
+      event(query: {id: $id}) {
          title
          body
          ogpImg
@@ -207,7 +207,7 @@ watch(
 
 const ogpURL = computed(() => {
   if (form.event.ogpImg) {
-    return `https://${VITE_PUBLIC_BUCKET}/ogp/${form.event.ogpImg}`
+    return `https://${VITE_PUBLIC_BUCKET_NAME}/ogp/${form.event.ogpImg}`
   }
   if (ogpLocalURL.value) {
     return ogpLocalURL.value
