@@ -13,3 +13,7 @@
   width: 0px;
   background: transparent;
 }
+
+html {
+  --color-brown: #23140a;
+}
