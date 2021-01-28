@@ -2,25 +2,33 @@
   <div class="my-10">
     <section-title text="メニュー" />
   </div>
-  <div class="flex relative z-20 mb-64">
+  <div class="flex lg:flex-row flex-col relative z-20 lg:mb-64">
     <div class="intro w-1/2 p-16 text-2xl">
       肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ
     </div>
-    <img class="w-2/5" src="/assets/DSC08492.jpeg" alt="" />
+    <img
+      class="lg:w-2/5 w-full lg:order-none order-first"
+      src="/assets/DSC08492.jpeg"
+      alt=""
+    />
   </div>
-  <div class="flex relative z-20 mb-64">
+  <div class="flex lg:flex-row flex-col relative z-20 lg:mb-64">
     <div class="intro w-1/2 p-16 text-2xl">
       肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ
     </div>
-    <img class="w-2/5" src="/assets/DSC08493.jpeg" alt="" />
+    <img
+      class="lg:w-2/5 w-full lg:order-none order-first"
+      src="/assets/DSC08493.jpeg"
+      alt=""
+    />
   </div>
-  <div class="flex relative z-20 mb-64">
-    <img class="w-3/5 z-0" src="/assets/DSC08494.jpeg" alt="" />
+  <div class="lg:flex block relative z-20 lg:mb-64">
+    <img class="lg:w-3/5 w-full z-0" src="/assets/DSC08494.jpeg" alt="" />
     <div class="intro right w-1/2 p-16 text-2xl">
       肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ
     </div>
   </div>
-  <div class="flex p-16 recommend">
+  <div class="lg:flex p-16 recommend">
     <recommend-item
       imgPath="/assets/DSC08493.jpeg"
       title="Title"
@@ -68,7 +76,7 @@ import RecommendItem from "./RecommendItem.vue";
   z-index: 10;
 }
 .right {
-  top: 400px;
+  top: 300px;
   left: -100px;
 }
 .right::after {
@@ -76,5 +84,16 @@ import RecommendItem from "./RecommendItem.vue";
 }
 .recommend {
   border: 1px solid #fff;
+}
+@media (max-width: 1024px) {
+  .intro {
+    width: 100%;
+    top: 0;
+    left: 0;
+    margin: 10px 0;
+  }
+  .intro::after {
+    display: none;
+  }
 }
 </style>

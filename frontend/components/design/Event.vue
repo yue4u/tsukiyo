@@ -2,9 +2,9 @@
   <div class="my-48 ml-32">
     <section-title text="イベント" />
   </div>
-  <div class="text-box flex w-full p-10">
-    <img class="w-2/5" src="/assets/DSC08492.jpeg" alt="" />
-    <div class="w-full mx-16">
+  <div class="text-box lg:flex block w-full p-10">
+    <img class="lg:w-2/5 w-full" src="/assets/DSC08492.jpeg" alt="" />
+    <div class="w-full lg:mx-16 lg:my-0 my-10">
       <div class="text-center">Title</div>
       <div class="text-left">test test</div>
     </div>

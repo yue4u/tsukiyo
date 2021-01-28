@@ -1,5 +1,5 @@
 <template>
-  <div class="mx-10">
+  <div class="lg:mx-10 lg:my-0 my-10">
     <img :src="imgPath" alt="" />
     <div class="title text-white mt-6">{{ title }}</div>
     <div class="divider"></div>
