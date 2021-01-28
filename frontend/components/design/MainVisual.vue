@@ -9,7 +9,7 @@
       class="flex justify-center items-center h-full w-full absolute top-0 left-0"
     >
       <div class="w-24">
-        <div class="lg:text-8xl text-6xl lg:leading-tight">月夜のけだもの</div>
+        <div class="title lg:text-8xl text-6xl">月夜のけだもの</div>
       </div>
     </div>
     <Nav position="right" />
@@ -19,3 +19,10 @@
 <script setup lang="ts">
 import Nav from "./Nav.vue";
 </script>
+
+
+<style scoped>
+  .title{
+    line-height: 1.1;
+  }
+</style>
