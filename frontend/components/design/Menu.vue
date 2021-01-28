@@ -1,49 +1,23 @@
 <template>
-  <div class="my-10">
+  <div id="menu" class="my-10">
     <section-title text="メニュー" />
   </div>
   <div class="flex lg:flex-row flex-col relative z-20 lg:mb-64">
-    <div class="intro w-1/2 p-16 text-2xl">
-      肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ
-    </div>
-    <img
-      class="lg:w-2/5 w-full lg:order-none order-first"
-      src="/assets/DSC08492.jpeg"
-      alt=""
-    />
+    <div class="intro w-1/2 p-16 text-2xl">肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ</div>
+    <img class="lg:w-2/5 w-full lg:order-none order-first" src="/assets/DSC08492.jpeg" />
   </div>
   <div class="flex lg:flex-row flex-col relative z-20 lg:mb-64">
-    <div class="intro w-1/2 p-16 text-2xl">
-      肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ
-    </div>
-    <img
-      class="lg:w-2/5 w-full lg:order-none order-first"
-      src="/assets/DSC08493.jpeg"
-      alt=""
-    />
+    <div class="intro w-1/2 p-16 text-2xl">肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ</div>
+    <img class="lg:w-2/5 w-full lg:order-none order-first" src="/assets/DSC08493.jpeg" />
   </div>
   <div class="lg:flex block relative z-20 lg:mb-64">
-    <img class="lg:w-3/5 w-full z-0" src="/assets/DSC08494.jpeg" alt="" />
-    <div class="intro right w-1/2 p-16 text-2xl">
-      肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ
-    </div>
+    <img class="lg:w-3/5 w-full z-0" src="/assets/DSC08494.jpeg" />
+    <div class="intro right w-1/2 p-16 text-2xl">肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ</div>
   </div>
   <div class="lg:flex p-16 recommend">
-    <recommend-item
-      imgPath="/assets/DSC08493.jpeg"
-      title="Title"
-      text="testtesttest"
-    />
-    <recommend-item
-      imgPath="/assets/DSC08493.jpeg"
-      title="Title"
-      text="testtesttest"
-    />
-    <recommend-item
-      imgPath="/assets/DSC08493.jpeg"
-      title="Title"
-      text="testtesttest"
-    />
+    <recommend-item imgPath="/assets/DSC08493.jpeg" title="Title" text="testtesttest" />
+    <recommend-item imgPath="/assets/DSC08493.jpeg" title="Title" text="testtesttest" />
+    <recommend-item imgPath="/assets/DSC08493.jpeg" title="Title" text="testtesttest" />
   </div>
 </template>
 

@@ -16,4 +16,5 @@
 
 html {
   --color-brown: #23140a;
+  scroll-behavior: smooth;
 }

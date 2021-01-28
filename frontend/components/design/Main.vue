@@ -22,6 +22,6 @@ import Access from "./Access.vue";
 
 <style scoped>
 .bg {
-  background-color: #23140a;
+  background-color: var(--color-brown);
 }
 </style>

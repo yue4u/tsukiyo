@@ -24,11 +24,10 @@ const props = defineProps<{
   position: "top" | "right";
 }>();
 const menu = [
-  { text: "About Us", link: "#" },
-  { text: "Web予約", link: "#" },
-  { text: "イベント一覧", link: "#" },
-  { text: "メニュー", link: "#" },
-  { text: "アクセス", link: "#" },
-  { text: "お問い合わせ", link: "#" },
+  { text: "About Us", link: "#about" },
+  { text: "イベント一覧", link: "/event" },
+  { text: "メニュー", link: "#menu" },
+  { text: "アクセス", link: "#access" },
+  { text: "お問い合わせ", link: "/contact" },
 ];
 </script>
