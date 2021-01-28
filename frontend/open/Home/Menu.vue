@@ -15,9 +15,9 @@
     <div class="intro right w-1/2 p-16 text-2xl">肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ</div>
   </div>
   <div class="lg:flex p-16 recommend">
-    <recommend-item imgPath="/assets/DSC08493.jpeg" title="Title" text="testtesttest" />
-    <recommend-item imgPath="/assets/DSC08493.jpeg" title="Title" text="testtesttest" />
-    <recommend-item imgPath="/assets/DSC08493.jpeg" title="Title" text="testtesttest" />
+    <recommend-item img-path="/assets/DSC08493.jpeg" title="Title" text="testtesttest" />
+    <recommend-item img-path="/assets/DSC08493.jpeg" title="Title" text="testtesttest" />
+    <recommend-item img-path="/assets/DSC08493.jpeg" title="Title" text="testtesttest" />
   </div>
 </template>
 

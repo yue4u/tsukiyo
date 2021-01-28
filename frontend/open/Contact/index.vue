@@ -14,8 +14,8 @@
             <textarea v-model="form.body" :class="inputClass" />
             <button type="submit" class="text-white bg-black col-span-2">submit</button>
         </form>
-        <pre class="text-left break-words whitespace-pre-wrap text-red-500" v-if="state.error">error...{{ state.error }}</pre>
-        <pre class="text-left break-words whitespace-pre-wrap" v-else>
+        <pre v-if="state.error" class="text-left break-words whitespace-pre-wrap text-red-500">error...{{ state.error }}</pre>
+        <pre v-else class="text-left break-words whitespace-pre-wrap">
         {{
             JSON.stringify(state.data, null, 4)
         }}
