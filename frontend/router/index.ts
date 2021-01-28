@@ -48,6 +48,11 @@ const routes: Array<RouteRecordRaw> = [
       },
     ],
   },
+  {
+    path: "/:pathMatch(.*)*",
+    name: "not-found",
+    component: () => import("@/open/NotFound.vue"),
+  },
 ];
 
 const router = createRouter({
