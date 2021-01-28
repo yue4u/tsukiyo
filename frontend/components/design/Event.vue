@@ -1,5 +1,5 @@
 <template>
-  <div class="my-48 ml-32">
+  <div class="lg:my-48 lg:ml-32 my-20">
     <section-title text="イベント" />
   </div>
   <div class="text-box lg:flex block w-full p-10">
