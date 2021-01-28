@@ -1,7 +1,7 @@
 <template>
   <div
     v-if="position == 'right'"
-    class="absolute text-xl top-0 right-0 h-full flex items-center mr-10"
+    class="absolute lg:text-xl top-0 right-0 h-full flex items-center lg:mr-10 mr-2"
   >
     <ul>
       <li v-for="item in menu" :key="item.text" class="my-8">
