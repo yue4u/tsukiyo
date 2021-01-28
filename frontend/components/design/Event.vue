@@ -15,7 +15,6 @@
 </template>
 
 <script setup lang="ts">
-// @ts-ignore
 import SectionTitle from "./SectionTitle.vue";
 </script>
 

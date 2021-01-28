@@ -17,6 +17,5 @@
 </template>
 
 <script setup lang="ts">
-// @ts-ignore
 import Nav from "./Nav.vue";
 </script>

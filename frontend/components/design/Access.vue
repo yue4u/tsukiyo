@@ -26,6 +26,5 @@
 </template>
 
 <script setup lang="ts">
-// @ts-ignore
 import Logo from "./Logo.vue";
 </script>

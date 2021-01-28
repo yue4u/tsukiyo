@@ -13,15 +13,10 @@
 </template>
 
 <script setup lang="ts">
-// @ts-ignore
 import MainVisual from "./MainVisual.vue";
-// @ts-ignore
 import Sentence from "./Sentence.vue";
-// @ts-ignore
 import Menu from "./Menu.vue";
-// @ts-ignore
 import Event from "./Event.vue";
-// @ts-ignore
 import Access from "./Access.vue";
 </script>
 

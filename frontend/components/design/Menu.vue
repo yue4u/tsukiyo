@@ -48,9 +48,7 @@
 </template>
 
 <script setup lang="ts">
-// @ts-ignore
 import SectionTitle from "./SectionTitle.vue";
-// @ts-ignore
 import RecommendItem from "./RecommendItem.vue";
 </script>
 
