@@ -1,21 +1,34 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 import { currentUser, waitForAuth } from "@/utils/auth";
 
+export const menu = [
+  { text: "About Us", link: "/#about" },
+  { text: "イベント一覧", link: "/event" },
+  { text: "メニュー", link: "/#menu" },
+  { text: "アクセス", link: "/#access" },
+  { text: "お問い合わせ", link: "/contact" },
+];
+
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
     name: "Home",
-    component: () => import("@/open/Home.vue"),
+    component: () => import("@/open/Home/index.vue"),
   },
   {
     path: "/contact",
     name: "Contact",
-    component: () => import("@/open/Contact.vue"),
+    component: () => import("@/open/Contact/index.vue"),
+  },
+  {
+    path: "/contact/success",
+    name: "ContactSuccess",
+    component: () => import("@/open/Contact/Success.vue"),
   },
   {
     path: "/event/:id_or_slug",
     name: "Event",
-    component: () => import("@/open/Event.vue"),
+    component: () => import("@/open/Event/index.vue"),
   },
   {
     path: "/admin",
@@ -51,7 +64,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: "/:pathMatch(.*)*",
     name: "not-found",
-    component: () => import("@/open/404.vue"),
+    component: () => import("@/open/404/index.vue"),
   },
 ];
 
