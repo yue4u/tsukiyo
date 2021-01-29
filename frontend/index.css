@@ -24,3 +24,6 @@ html {
 .bg-wheat {
   background-color: wheat;
 }
+.bg-brown {
+  background-color: var(--color-brown);
+}

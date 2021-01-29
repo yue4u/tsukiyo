@@ -1,6 +1,14 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 import { currentUser, waitForAuth } from "@/utils/auth";
 
+export const menu = [
+  { text: "About Us", link: "/#about" },
+  { text: "イベント一覧", link: "/event" },
+  { text: "メニュー", link: "/#menu" },
+  { text: "アクセス", link: "/#access" },
+  { text: "お問い合わせ", link: "/contact" },
+];
+
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
