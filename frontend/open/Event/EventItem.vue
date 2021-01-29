@@ -2,7 +2,7 @@
     <main>
         <Header />
         <p v-if="fetching">fetching...</p>
-        <p v-else-if="error">error...{{ error }}</p>
+        <p v-else-if="error">error...</p>
         <article v-else class="container mx-auto">
             <h1 class="text-4xl my-10">{{ data?.event.title }}</h1>
             <p>{{ data?.event.pageView }}views</p>
