@@ -17,4 +17,10 @@
 html {
   --color-brown: #23140a;
   scroll-behavior: smooth;
+  font-family: "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", Osaka,
+    "メイリオ", Meiryo, "ＭＳ Ｐゴシック", "MS PGothic", sans-serif;
+}
+
+.bg-wheat {
+  background-color: wheat;
 }

@@ -1,5 +1,5 @@
 <template>
-  <div
+  <nav
     v-if="position == 'right'"
     class="absolute lg:text-xl top-0 right-0 h-full flex items-center lg:mr-10 mr-2"
   >
@@ -8,14 +8,14 @@
         <a :href="item.link">{{ item.text }}</a>
       </li>
     </ul>
-  </div>
-  <div v-if="position == 'top'" class="bg-gray-900 px-20">
+  </nav>
+  <nav v-if="position == 'top'" class="bg-gray-900 px-20">
     <ul class="flex justify-between container mx-auto text-white">
       <li v-for="item in menu" :key="item.text" class="my-8">
         <a :href="item.link">{{ item.text }}</a>
       </li>
     </ul>
-  </div>
+  </nav>
 </template>
 
 <script setup lang="ts">

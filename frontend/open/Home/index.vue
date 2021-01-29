@@ -1,20 +1,16 @@
 <template>
-  <main-visual />
-  <div class="bg">
-    <div class="container mx-auto">
-      <Sentence />
-      <Menu />
-      <Event />
-    </div>
-  </div>
-  <div class="container mx-auto">
+  <main class="bg">
+    <MainVisual />
+    <About />
+    <Menu />
+    <Event />
     <Access />
-  </div>
+  </main>
 </template>
 
 <script setup lang="ts">
 import MainVisual from "./MainVisual.vue";
-import Sentence from "./Sentence.vue";
+import About from "./About.vue";
 import Menu from "./Menu.vue";
 import Event from "./Event.vue";
 import Access from "./Access.vue";

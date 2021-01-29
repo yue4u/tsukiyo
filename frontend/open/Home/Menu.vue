@@ -1,24 +1,26 @@
 <template>
-  <div id="menu" class="my-10">
-    <section-title text="メニュー" />
-  </div>
-  <div class="flex lg:flex-row flex-col relative z-20 lg:mb-64">
-    <div class="intro w-1/2 p-16 text-2xl">肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ</div>
-    <img class="lg:w-2/5 w-full lg:order-none order-first" src="/assets/DSC08492.jpeg" />
-  </div>
-  <div class="flex lg:flex-row flex-col relative z-20 lg:mb-64">
-    <div class="intro w-1/2 p-16 text-2xl">肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ</div>
-    <img class="lg:w-2/5 w-full lg:order-none order-first" src="/assets/DSC08493.jpeg" />
-  </div>
-  <div class="lg:flex block relative z-20 lg:mb-64">
-    <img class="lg:w-3/5 w-full z-0" src="/assets/DSC08494.jpeg" />
-    <div class="intro right w-1/2 p-16 text-2xl">肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ</div>
-  </div>
-  <div class="lg:flex p-16 recommend">
-    <recommend-item img-path="/assets/DSC08493.jpeg" title="Title" text="testtesttest" />
-    <recommend-item img-path="/assets/DSC08493.jpeg" title="Title" text="testtesttest" />
-    <recommend-item img-path="/assets/DSC08493.jpeg" title="Title" text="testtesttest" />
-  </div>
+  <section id="menu" class="container mx-auto my-32">
+    <SectionTitle text="メニュー" />
+    <div class="flex lg:flex-row flex-col relative z-20 lg:mb-64">
+      <div class="intro w-1/2 p-16 text-2xl">肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ</div>
+      <img class="lg:w-2/5 w-full lg:order-none order-first" src="/assets/DSC08492.jpeg" />
+    </div>
+    <div class="flex lg:flex-row flex-col relative z-20 lg:mb-64">
+      <div class="intro w-1/2 p-16 text-2xl">肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ</div>
+      <img class="lg:w-2/5 w-full lg:order-none order-first" src="/assets/DSC08493.jpeg" />
+    </div>
+    <div class="lg:flex block relative z-20 lg:mb-64">
+      <img class="lg:w-3/5 w-full z-0" src="/assets/DSC08494.jpeg" />
+      <div
+        class="intro right w-1/2 p-16 text-2xl"
+      >肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ</div>
+    </div>
+    <div class="lg:flex p-16 recommend">
+      <RecommendItem img-path="/assets/DSC08493.jpeg" title="Title" text="testtesttest" />
+      <RecommendItem img-path="/assets/DSC08493.jpeg" title="Title" text="testtesttest" />
+      <RecommendItem img-path="/assets/DSC08493.jpeg" title="Title" text="testtesttest" />
+    </div>
+  </section>
 </template>
 
 <script setup lang="ts">
@@ -33,7 +35,7 @@ import RecommendItem from "./RecommendItem.vue";
   left: 100px;
   display: block;
   height: 300px;
-  background-color: #fff;
+  background-color: wheat;
 }
 .intro::after {
   content: "";
@@ -41,7 +43,7 @@ import RecommendItem from "./RecommendItem.vue";
   width: 100%;
   height: 300px;
   background-color: transparent;
-  border: 1px solid #fff;
+  border: 1px solid wheat;
   position: absolute;
   top: 30px;
   left: -30px;
@@ -55,7 +57,7 @@ import RecommendItem from "./RecommendItem.vue";
   top: -30px;
 }
 .recommend {
-  border: 1px solid #fff;
+  border: 1px solid wheat;
 }
 @media (max-width: 1024px) {
   .intro {

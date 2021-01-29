@@ -1,11 +1,11 @@
 <template>
-  <div id="about" class="lg:flex block lg:max-h-screen py-20 justify-between">
+  <section id="about" class="container mx-auto my-32 lg:flex block lg:max-h-screen justify-between">
     <img class="lg:w-3/5 w-full" src="/assets/DSC08504.jpeg" />
-    <div class="lg:w-2/5 w-full text-white text-center">
-      <div class="text-4xl my-10 inline-block under">宮沢賢治</div>
-      <div v-for="i in text" :key="i" class="mx-10">{{ i }}</div>
-    </div>
-  </div>
+    <article class="lg:w-2/5 w-full text-white text-center">
+      <h2 class="text-4xl my-10 inline-block under">宮沢賢治</h2>
+      <p v-for="i in text" :key="i" class="mx-10">{{ i }}</p>
+    </article>
+  </section>
 </template>
 
 <script setup lang="ts">
