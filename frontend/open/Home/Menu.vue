@@ -16,9 +16,9 @@
       >肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ肉料理だよ</div>
     </div>
     <div class="lg:flex p-16 recommend">
-      <RecommendItem img-path="/assets/DSC08493.jpeg" title="Title" text="testtesttest" />
-      <RecommendItem img-path="/assets/DSC08493.jpeg" title="Title" text="testtesttest" />
-      <RecommendItem img-path="/assets/DSC08493.jpeg" title="Title" text="testtesttest" />
+      <RecommendItem title="Title" text="testtesttest" />
+      <RecommendItem title="Title" text="testtesttest" />
+      <RecommendItem title="Title" text="testtesttest" />
     </div>
   </section>
 </template>
