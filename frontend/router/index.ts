@@ -21,6 +21,11 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import("@/open/Contact/index.vue"),
   },
   {
+    path: "/contact/success",
+    name: "ContactSuccess",
+    component: () => import("@/open/Contact/Success.vue"),
+  },
+  {
     path: "/event/:id_or_slug",
     name: "Event",
     component: () => import("@/open/Event/index.vue"),

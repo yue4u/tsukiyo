@@ -33,6 +33,7 @@ import { useMutation, } from '@urql/vue'
 import Header from '@/components/Header.vue'
 import { inputClass } from '@/utils'
 import type { Contact } from '@/type/gql'
+import router from '@/router'
 
 
 const form = reactive(
@@ -76,8 +77,11 @@ const { executeMutation: createContact } = useMutation<{ createContact: Contact 
 
 const handleSubmit = async () => {
     const { data, error } = await createContact(toRaw(form));
+    if (!error) {
+        router.push('/contact/success');
+    }
     state.data = JSON.stringify(data, null, 4);
-    state.error = JSON.stringify(error, null, 4);
+    state.error = error?.toString()
 }
 </script>
 
