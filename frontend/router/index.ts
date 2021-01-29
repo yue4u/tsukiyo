@@ -26,9 +26,14 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import("@/open/Contact/Success.vue"),
   },
   {
-    path: "/event/:id_or_slug",
+    path: "/event",
     name: "Event",
     component: () => import("@/open/Event/index.vue"),
+  },
+  {
+    path: "/event/:id_or_slug",
+    name: "EventItem",
+    component: () => import("@/open/Event/EventItem.vue"),
   },
   {
     path: "/admin",
