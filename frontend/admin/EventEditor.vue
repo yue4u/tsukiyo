@@ -113,7 +113,7 @@ import { useRouter } from "vue-router";
 import { inputClass, maybeTimestamp, maybeDateString } from '@/utils'
 import { OGP } from '@/utils/stroage'
 
-const { VITE_PUBLIC_BUCKET_NAME } = import.meta.env;
+const PUBLIC_BUCKET_NAME = import.meta.env.VITE_PUBLIC_BUCKET_NAME;
 
 const router = useRouter();
 const { id } = router.currentRoute.value.query;
@@ -205,7 +205,7 @@ watch(
 
 const ogpURL = computed(() => {
   if (form.event.ogpImg) {
-    return `https://${VITE_PUBLIC_BUCKET_NAME}/ogp/${form.event.ogpImg}`
+    return `https://${PUBLIC_BUCKET_NAME}/ogp/${form.event.ogpImg}`
   }
   if (ogpLocalURL.value) {
     return ogpLocalURL.value
