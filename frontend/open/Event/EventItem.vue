@@ -61,10 +61,8 @@ const markdown = computed(() => {
     return data.value?.event ? marked(data.value?.event.body, { sanitize: true }) : "";
 });
 
-const { VITE_PUBLIC_BUCKET_NAME } = import.meta.env;
-
 const imgSrc = computed(() => {
     if (!data.value?.event.ogpImg) return null
-    return `https://${VITE_PUBLIC_BUCKET_NAME}/ogp/${data.value?.event.ogpImg}`
+    return `https://${import.meta.env.VITE_PUBLIC_BUCKET_NAME}/ogp/${data.value?.event.ogpImg}`
 })
 </script>
