@@ -93,6 +93,7 @@ const handleSubmit = async () => {
     label{
         display: block;
         width: 100%;
+        margin-top: 20px;
     }
 }
 </style>
