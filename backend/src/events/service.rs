@@ -85,11 +85,9 @@ pub fn list(ctx: &Context, by: Option<EventListQuery>) -> anyhow::Result<Vec<Eve
 pub fn list_public(ctx: &Context, by: Option<EventListQuery>) -> anyhow::Result<Vec<EventPublic>> {
     let conn = ctx.pool.get()?;
     let mut query = events::table.into_boxed();
+    query = query.filter(events::published.eq(true));
+    // TODO: simplify this
     if let Some(by_event) = by {
-        // TODO: simplify this
-        if let Some(_published) = by_event.published {
-            query = query.filter(events::published.eq(_published));
-        }
         if let Some(_genre) = by_event.genre {
             query = query.filter(events::genre.eq(_genre));
         }
