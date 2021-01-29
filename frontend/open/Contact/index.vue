@@ -3,7 +3,7 @@
     <main class="mx-10">
         <h1 class="text-4xl my-10">Contact</h1>
         <form
-            class="grid grid-cols-2 gap-2 form container mx-auto text-2xl text-left"
+            class="md:grid md:grid-cols-2 md:gap-2 form container mx-auto text-2xl text-left"
             @submit.prevent="handleSubmit"
         >
             <label class="text-bold capitalize">title</label>
@@ -85,8 +85,14 @@ const handleSubmit = async () => {
 }
 </script>
 
-<style>
+<style scoped>
 .form {
     grid-template-columns: 10rem 1fr;
+}
+@media (max-width: 768px) {
+    label{
+        display: block;
+        width: 100%;
+    }
 }
 </style>
