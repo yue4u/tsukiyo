@@ -7,7 +7,7 @@
             <h1 class="text-4xl my-10">{{ data?.event.title }}</h1>
             <p>{{ data?.event.pageView }}views</p>
             <time class="block my-5">{{ dateTime.format(data?.event.publishAt) }}</time>
-            <img v-if="imgSrc" class="my-10" :src="imgSrc" />
+            <img v-if="imgSrc" class="my-10 mx-auto" :src="imgSrc" />
             <div v-html="markdown"></div>
         </article>
     </main>
