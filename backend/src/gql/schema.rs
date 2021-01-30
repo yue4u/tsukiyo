@@ -9,7 +9,7 @@ use juniper::{graphql_object, EmptySubscription, FieldResult, RootNode};
 
 impl juniper::Context for Context {}
 
-const API_VERSION: &str = "0.1";
+const API_VERSION: &str = "0.2";
 
 pub struct QueryAdmin;
 
