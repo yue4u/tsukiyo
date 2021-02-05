@@ -48,6 +48,7 @@ jobs:
           region: ${{ env.REGION }}
 
       - uses: 8398a7/action-slack@v3
+        if: ${{ always() }}
         with:
           status: custom
           fields: workflow,job,commit,repo,ref,author,took
